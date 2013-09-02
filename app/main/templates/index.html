@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load base_extras %}
+{% load base_extras static %}
 
 {% block title %}Home{% endblock %}
 {% block body_id %}welcome{% endblock body_id %}
@@ -63,7 +63,7 @@
 				<hr>
 			</div>
 			<div class="col-md-5 col-md-offset-1">
-				<img src="img/robabay.jpg" class="img-circle img-responsive" alt="">
+				<img src="{% static "images/robabay.jpg" %}" class="img-circle img-responsive" alt="">
 			</div>
 			<div class="col-md-5">
 				<h3 class="thin">Something special</h3>
