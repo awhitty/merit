@@ -1,0 +1,27 @@
+<div class="navbar navbar-static-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+            </button>
+            <!-- <a class="navbar-brand" href="index.html"><img class="logo" src="img/nhs-logo-on-white.svg" alt=""></a> -->
+            <a href="#" class="navbar-brand">Merit</a>
+        </div>
+
+        
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="{% url 'merit-home' %}" active-link="active">Home</a></li>
+                <li><a href="{% url 'merit-occurrences' %}" active-link="active">Events</a></li>
+                <li><a href="{% url 'merit-rsvps' %}" active-link="active">RSVPs</a></li>
+                <li><a href="stats" active-link="active">Stats</a></li>
+            </ul>
+            <ul class="nav navbar-nav pull-right">
+                <li><a href="#"><span class="pull-left glyphicon glyphicon-cog"></span> <span class="visible-sm pull-left">Settings</span></a></li>
+                <li><a href="#"><span class="pull-left glyphicon glyphicon-off"></span> <span class="visible-sm pull-left">Sign out</span></a></li>
+            </ul>
+        </div>
+    </div>
+</div>

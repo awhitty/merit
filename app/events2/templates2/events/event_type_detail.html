@@ -1,0 +1,29 @@
+{% extends "base_2_col.html" %}
+{% load markup %}
+{% block title %}{{ event_type.title }}{% endblock %}
+{% block body-class %}two_col{% endblock %}
+{% block body-id %}event_type{% endblock %}
+{% block primary %}
+  <h4 class="section"><span class="iconic tag"></span>Event Type</h4>
+  <span class="event-color" style="background-color: #{{ event_type.color }}"></span><h3>{{ event_type.title }}</h3>
+  <div class="description">
+  {{ event_type.description|markdown }}
+  </div>
+{% endblock %}
+{% block secondary %}
+  {% if featured_list %}
+    <h4 class="section"><span class="iconic calendar-alt"></span>Featured Events</h4>
+      <div class="chunk">
+      <table id="events">
+      {% for event in featured_list %}
+        <tr class="event {% if user in occurrence.users.all %}rsvp{% endif %}" style="border-color: #{{ occurrence.event.event_type.color }};">
+          <td class="details">
+            <a href="{{ event.get_absolute_url }}">{{ event.title }}</a>
+            <span class="location">{{ event.place }}</span>
+          </td>
+      	</tr>
+      {% endfor %}
+      </table>
+    </div>
+  {% endif %}
+{% endblock %}

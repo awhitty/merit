@@ -1,0 +1,30 @@
+{% extends "base_1_col.html" %}
+{% load markup month_cal %}
+{% block title %}Calendar &dash; {{ this_month|date:"F, Y" }}{% endblock %}
+{% block body-id %}calendar{% endblock %}
+{% block extra-javascript %}
+  <script type="text/javascript" charset="utf-8">
+    $("ul").click(function(){
+        // $("ul").removeClass("show");
+        $(this).toggleClass("show");
+    });
+  </script>
+{% endblock %}
+{% block solo %}
+  <div id="calendar-top">
+    <h4 class="section"><span class="iconic calendar"></span>{{ this_month|date:"F, Y" }}</h4>
+    <a class="cal-arrow" href="{% url events:month-view last_month.year, last_month.month %}"><span class="iconic arrow-left-alt"></span></a><a class="cal-arrow" href="{% url events:month-view next_month.year, next_month.month %}"><span class="iconic arrow-right-alt"></span></a>
+    <ul id="filter" class="right">
+      {#  #}
+      Filter: 
+      <li><a class="button text" href="?">None</a></li>
+      {% for et in etset %}
+        <li><a class="button text" style="background-color: #{{ et.color }}; border-color: #{{ et.color }};" href="?filter={{ et.slug }}">{{ et }}</a></li>
+      {% endfor %}
+      <a class="button text monotone" href="{% url events:month-list this_month.year, this_month.month %}"><span class="iconic">A</span>View as list</a>
+    </ul>
+  </div>
+    {% do_calendar year month filter %}
+{% endblock %}
+
+{# TODO: show key on calendar #}

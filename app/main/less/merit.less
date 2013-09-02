@@ -1,0 +1,180 @@
+@import "bootstrap/bootstrap";
+@import "variables";
+
+// Variables
+//-------------------------------
+
+@header-background-color: #002835;
+@dull:                    #39474C;
+
+// Globals
+//-------------------------------
+
+body, html {
+	height: 100%;
+	-webkit-font-smoothing: antialiased;
+	// font-weight: 100;
+}
+
+article p {
+	font-size: @font-size-large;
+	.thin;
+	.dull;
+}
+
+.big {
+	font-size: 50px;
+}
+
+.btn-big {
+	padding: 20px 30px;
+}
+
+.thin {
+	font-weight: 300;
+}
+
+.thick {
+	font-weight: 700;
+}
+
+.small {
+	font-size: 12px;
+}
+
+.center {
+	text-align: center;
+}
+
+.right {
+	text-align: right;
+}
+
+.dull {
+	color: @dull;
+}
+
+.muted {
+	color: @gray;
+}
+
+.inverted {
+	background: #39474C;
+
+	color: #fff;
+
+	.dull {
+		color: #D6F8FF;
+	}
+}
+
+.tinted {
+	background: #D6F8FF;
+}
+
+.truncate {
+	width: 350px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.title {
+	.dull;
+}
+
+.description {
+	.muted;
+}
+
+table th:nth-child(4),
+table td:nth-child(4) {
+	width: 350px;
+}
+
+.buttons {
+	width: 120px;
+}
+
+hr {
+	margin: 40px 0;
+	border-top: 1px solid rgba(0,0,0,.1);
+}
+
+tbody td {
+	vertical-align: middle!important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: Museo Sans, Avenir, "Helvetica Neue", Arial, sans-serif;
+}
+
+// Header
+//-------------------------------
+
+#welcome {
+	header {
+		background: @header-background-color;
+		color: white;
+
+		padding-bottom: 90px;
+
+		.name {
+			margin-top: 10px;
+		}
+	}
+
+	.active a {
+		background: @brand-primary !important;
+	}
+
+	.navbar {
+		background: none;
+		border-color: rgba(0,0,0,0);
+	}
+}
+.logo {
+	height: 25px;
+}
+
+.navbar {
+	// background: none;
+	// height: 50px;
+}
+
+.active a {
+	background: @gray !important;
+	color: #fff !important;
+}
+
+.btn-on-black {
+	background: rgba(0,0,0,0);
+}
+
+.big-sign-in {
+	padding-top: 40px;
+	margin-bottom: -40px;
+
+	.btn {
+		padding: 20px 30px;
+		margin-bottom: 20px;
+	}
+}
+
+.tile {
+	padding: 30px 0;
+}
+
+// Footer
+//-------------------------------
+
+footer {
+}
+
+
+@media (max-width: 992px) {
+	table th:nth-child(4),
+	table td:nth-child(4) {
+		display: none;
+	}
+}

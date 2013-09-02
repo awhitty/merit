@@ -1,0 +1,3 @@
+{% if tags %}<address><strong>{% endif %}{{ place.name }}{% if tags %}</strong><br>{% endif %}
+{% if place.address %} {{ place.address }} {% if tags %}<br>{% endif %}{% endif %}
+{% if place.city %}{{ place.city }}{% if place.state %}, {% endif %}{% endif %}{% if place.state %}{{ place.state }}{% if place.zip %} {% endif %}{% endif %}{% if place.zip %} {{ place.zip }} {% if tags %}</address>{% endif %}{% endif %}

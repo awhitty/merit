@@ -1,0 +1,100 @@
+{% extends "base_page.html" %}
+{% load timedelta rsvp event %}
+
+{% block title %}
+  &mdash; Your RSVPs
+{% endblock title %}
+{% block body_id %}rsvps{% endblock body_id %}
+
+{% block header_prepend %}
+  <div class="btn-group pull-right">
+    <a class="btn btn-large disabled"><i class="icon-print"></i></a>
+    <a href="?print=True" target="_blank" class="btn btn-large btn-info">MegaSheet&trade;</a>
+    <a href="?print=True&blank=True" class="btn btn-large btn-inverse">Blank</a>
+  </div>
+{% endblock header_prepend %}
+
+{% block page_title %}Your RSVPs <span id="count" class="badge">{{ rsvps.count }}</span>{% endblock page_title %}
+
+{% block content %}
+    
+  <div class="row">
+    {% for type in event_types %}
+    {% with request|get_hours:type as hours %}
+    {% with request|get_hours_as_percent:type as percent %}
+    <div class="span3">
+      <h4 class="caps">{{ type.title }}<span class="light pull-right">{{ hours }}</span></h4>
+    	<div class="progress progress-info">
+        <div class="bar" style="width: {{ percent }}%;"></div>
+        <div class="bar" style="width: 70%;"></div>
+
+      </div>
+    </div>
+    {% endwith %}
+    {% endwith %}
+    {% endfor %}
+  </div>
+  <div class="row">
+    <div class="span12">
+      {# {% if rsvp in rsvps %} #}
+      <table id="rsvpTable" class="table table-bordered table-striped">
+        {% include "events/includes/event_thead.html" %}
+        <tbody id="tableBody">
+          {% for rsvp in rsvps %}
+            {% occurrence_row request rsvp.occurrence %}
+          {% endfor %}
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+{% endblock content %}
+{% block js %}
+<script type="text/javascript">
+  $(function() {
+    $('body').on('click', '#rsvpTable .modal-toggle', function(e) {
+      var occurrence_id = $(this).attr('data-id');
+
+      if ($('#occurrence_'+occurrence_id).length == 0) {
+        $.get('{% url get_occurrence_modal_blank %}'+occurrence_id, function(data) {
+          $('body').append(data);
+          $('#occurrence_'+occurrence_id).modal()
+        })
+      } else {
+        $('#occurrence_'+occurrence_id).modal()
+      }
+    })
+
+    $('body').on('click', '.btn-rsvp', function(e) {
+      rsvp_button($(this))
+    })
+  });
+
+  function rsvp_button(button) {
+    var action        = button.attr('data-action')
+    var occurrence_id = button.attr('data-id')
+
+    var btns         = $('.btn-rsvp[data-id='+occurrence_id+']')
+    var row          = $('.trow[data-id='+occurrence_id+']')
+    var modalContent = $('.modal[data-id='+occurrence_id+'] .c')
+    var count        = $('#count')
+
+    $.ajax({
+      type: 'POST',
+      url: '{% url rsvp %}',
+      data: { action: action, occurrence_id: occurrence_id },
+      cache: false,
+      success: function(data) {
+        btns.replaceWith(data.button)
+        row.replaceWith(data.row)
+        modalContent.replaceWith($('.c', data.modal))
+        count.html(data.rsvp_count)
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.log('No good... '+textStatus+" - "+errorThrown)
+      },
+      dataType: 'text json'
+    })
+  }
+</script>
+{% endblock js %}

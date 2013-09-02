@@ -1,0 +1,45 @@
+{% extends "base_page.html" %}
+
+{% block title %}Occurrences{% endblock title %}
+{% block body_id %}occurrences{% endblock body_id %}
+
+{% block content %}
+<section class="tile">
+	<div class="container">
+
+			<table class="table table">
+				<thead class="">
+					<tr>
+						<th><span class="glyphicon glyphicon-time"></span></th>
+						<th><span class="glyphicon glyphicon-resize-horizontal"></span></th>
+						<th></th>
+						<th><span class="glyphicon glyphicon-align-left"></span></th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="day">
+						<td colspan="6"><h5 class="thick">Today <small class="muted">(August 8th, 2013)</small></h5></td>
+					</tr>
+					<tr>
+						<td>3 pm</td>
+						<td>2 hours</td>
+						<td class="title" parent-event key="occurrence.event"><strong>Title</strong></td>
+						<td class="description">
+							<div class="truncate" parent-event key="occurrence.event">
+								Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quis, accusantium, excepturi, placeat blanditiis obcaecati asperiores provident odit rem dicta laudantium enim modi dolores ipsum vel debitis doloribus iure porro totam.
+							</div>
+						</td>
+						<td>
+							<rsvp-button occurrence="occurrence" ></rsvp-button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<ul class="pager">
+				<li class="previous disabled"><a href="#">&larr; Sooner</a></li>
+				<li class="next"><a href="#">Later &rarr;</a></li>
+			</ul>
+	</div>
+</section>
+{% endblock content %}

@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+	<head>
+		<title>{{ title }} — {{ site.title }}</title>
+		<link rel="stylesheet" type="text/css" href="css/merit.css">
+
+		<!-- jQuery -->
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+		<!-- Bootstrap -->
+		<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js"></script>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	</head>
+	<body>
+		<header>
+			<div class="navbar">
+			  <div class="container">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<!-- <a class="navbar-brand" href="index.html"><img class="logo" src="img/nhs-logo-on-white.svg" alt=""></a> -->
+				<a href="#" class="navbar-brand">Merit</a>
+				<ul class="nav navbar-nav nav-collapse collapse navbar-responsive-collapse">
+				  <li><a href="#/" active-link="active">Home</a></li>
+				  <li><a href="#/events" active-link="active">Events</a></li>
+				  <li><a href="#/rsvps" active-link="active">RSVPs</a></li>
+				</ul>
+				<ul class="nav navbar-nav nav-collapse collapse navbar-responsive-collapse pull-right">
+					<li><a href="#"><span class="pull-left glyphicon glyphicon-off"></span> <span class="visible-sm pull-left">Sign out</span></a></li>
+					<li><a href="#"><span class="pull-left glyphicon glyphicon-cog"></span> <span class="visible-sm pull-left">Settings</span></a></li>
+					<li><a href="#/events/add"><span class="pull-left glyphicon glyphicon-plus"></span> <span class="visible-sm pull-left">Settings</span></a></li>
+					<li><a href="#/events/list"><span class="pull-left glyphicon glyphicon-edit"></span> <span class="visible-sm pull-left">Settings</span></a></li>
+				</ul>
+			  </div>
+			</div>
+		</header>
+
+		{% block content %}{% endblock content %}
+
+		<footer class="tile inverted">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-6">
+						<h5>&copy; <span class="thick">2013 National Honor Society</span> <span class="thin">at Cherry Creek High School</span></h5>
+					</div>
+				</div>
+			</div>
+		</footer>
+	</body>
+</html>

@@ -1,0 +1,6 @@
+{% load events_extras %}
+<ul class="hour_list">
+{% for et, duration in zipped_list %}
+  <li class="{% if duration >= et.quota %}green{% else %}red{% endif %}"><strong>{{ duration|format_timedelta }}</strong> {{ et.title }}</li>
+{% endfor %}
+</ul>

@@ -1,0 +1,32 @@
+{% extends "base_1_col.html" %}
+{% load markup month_cal %}
+
+{% block title %}Calendar — {{ this_month|date:"F, Y" }}{% endblock %}
+{% block body-id %}calendar{% endblock %}
+{% block solo %}
+  <div id="calendar-top">
+    <h4 class="section"><span class="iconic calendar"></span>{{ this_month|date:"F, Y" }}</h4>
+    <ul id="filter" class="right">
+      {#  #}
+      Filter: 
+      <li><a class="button text" href="?">None</a></li>
+      {% for et in etset %}
+        <li class="date"><a class="button text" style="background-color: #{{ et.color }}; border-color: #{{ et.color }};"  href="?filter={{ et.slug }}">{{ et }}</a></li>
+      {% endfor %}
+      <a class="button text monotone" href="{% url events:month-view this_month.year, this_month.month %}"><span class="iconic">a</span>View as calendar</a>
+    </ul>
+  </div>
+  <ul id="event-list">
+    {% regroup occurrences by event.event_type as group %}
+   
+    {% for type in group %}
+   
+    {% for occurrence in type.list %}
+      {% ifchanged %}<li class="date">{{ occurrence.date }}</li>{% endifchanged %}
+        <li><a class="button text" style="background-color: #{{ occurrence.event.event_type.color }}; border-color: #{{ occurrence.event.event_type.color }};" href="{{ occurrence.get_absolute_url }}">{{ occurrence.title }}{% if occurrence.event.capacity %} ({{ occurrence.users.all.count }}/{{ occurrence.event.capacity }}){% endif %}</a>  <span class="time-span">from <span class="time">{{ occurrence.start_time|date:"P" }}</span> to <span class="time">{{ occurrence.end_time|date:"P" }}</span></span></li>
+      {% endfor %}
+    {% endfor %}
+  </ul>
+  <a class="cal-arrow" href="{% url events:month-list last_month.year, last_month.month %}"><span class="bigger iconic arrow-left-alt"></span></a><a class="cal-arrow" href="{% url events:month-list next_month.year, next_month.month %}"><span class="bigger iconic arrow-right-alt"></span></a>
+    
+{% endblock %}

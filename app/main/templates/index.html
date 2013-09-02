@@ -1,6 +1,139 @@
 {% extends "base.html" %}
 
-{% block title %}Home{% endblock %}
+{% load base_extras %}
 
-{% block content %}
+{% block title %}Home{% endblock %}
+{% block body_id %}welcome{% endblock body_id %}
+
+{% block base_content %}
+<header>
+	<div class="navbar navbar-inverse navbar-static-top">
+	  	<div class="container">
+		  	<div class="navbar-header">
+	            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+			    	<span class="sr-only">Toggle navigation</span>
+			    	<span class="icon-bar"></span>
+			    	<span class="icon-bar"></span>
+			    	<span class="icon-bar"></span>
+			    </button>
+
+	            <!-- <a class="navbar-brand" href="index.html"><img class="logo" src="img/nhs-logo-on-white.svg" alt=""></a> -->
+	            <a href="#" class="navbar-brand">Merit</a>
+	        </div>
+
+	        
+	        <div class="collapse navbar-collapse navbar-ex1-collapse">
+	            <ul class="nav navbar-nav">
+	                <li class="{% navactive request 'home' %}"><a href="{% url 'home' %}">Home</a></li>
+	                <li><a href="#">About</a></li>
+	                <li><a href="#">Board</a></li>
+	            </ul>
+	            
+	            <a href="#" class="btn btn-on-black btn-primary navbar-btn pull-right">Sign in</a>
+	        </div>
+	  	</div>
+	</div>
+
+	<div class="container">
+		<div class="name row">
+			<div class="col-md-8 col-md-offset-2 center">
+				<h1 class="thick big">National Honor Society</h1>
+				<h4 class="thin">at Cherry Creek High School</h4>
+			</div>
+		</div>
+		<div class="big-sign-in row">
+			<div class="col-md-3 col-md-offset-3">
+				<a href="login.html" class="btn btn-block btn-primary btn-large">Sign in</a>
+			</div>
+			<div class="col-md-3">
+				<a href="#" class="btn-on-black btn btn-info btn-block btn-large">Not a member?</a>
+			</div>
+		</div>
+	</div>
+</header>
+<section class="tile">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+				<h3 class="center thick dull">
+					Fostering leadership, community, and academics
+				</h3>
+				<h4 class="center thin muted">A community of driven, responsible young adults</h4>
+
+				<hr>
+			</div>
+			<div class="col-md-5 col-md-offset-1">
+				<img src="img/robabay.jpg" class="img-circle img-responsive" alt="">
+			</div>
+			<div class="col-md-5">
+				<h3 class="thin">Something special</h3>
+				<p class="dull thin">
+					National Honor Society is a nationally recognized organization that commends students for outstanding scholarship, citizenship, service, and character. Cherry Creek NHS members participate in a wide variety of tutoring and community service opportunities in the school and community.
+				</p>
+			</div>
+		</div>
+	</div>
+</section>
+<section class="tile tinted">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+				<h3 class="center thick dull">
+					Rewarding excellence
+				</h3>
+				<h4 class="center thin dull">
+					
+				</h4>
+				<hr>
+			</div>
+			<div class="col-md-5 col-md-offset-1">
+				<p class="thin">We want to reward the hard work and diligence students have devoted to their academic careers. We also want to build a community of the most talented and motivated minds at Creek. To achieve these goals, we use a three-step application process to find the students we think best align with our values.</p>
+			</div>
+			<div class="col-md-6">
+				<h4 class="center thick dull">The Process</h4>
+			</div>
+			<div class="col-md-6">
+				<div class="col-md-4">
+					<h3 class="thin"><span class="label label-info">1</span> <small class="dull">Invitation</small></h3 class="thin">
+					<p class="muted small">
+						Qualifying students are invited to apply for the next year's NHS chapter typically about a month into the second semester.
+					</p>
+				</div>
+				<div class="col-md-4">
+					<h3 class="thin"><span class="label label-info">2</span> <small class="dull">Application</small></h3 class="thin">
+					<p class="muted small">
+						In order to be considered for induction into the society, invitees must submit an application answering a short essay prompt and a few questions.
+					</p>
+				</div>
+				<div class="col-md-4">
+					<h3 class="thin"><span class="label label-info">3</span> <small class="dull">Selection</small></h3 class="thin">
+						<p class="muted small">
+							Once applications are submitted, the <a href="#">executive board</a> will read through each application before selecting a handful of welcome inductees.
+						</p>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+				<hr>
+			</div>
+			<div class="col-md-5 col-md-offset-1">
+				<p class="">Applications for the <strong>2014-2015</strong> chapter <strong>have not started</strong>. <br>
+					Please check back soon.</p>
+			</div>
+			<div class="col-md-4">
+					<a href="#" class="btn btn-warning disabled btn-block btn-big">Apply today <span class="glyphicon glyphicon-arrow-right"></span></a>
+			</div>
+		</div>
+	</div>
+</section>
+<footer class="tile inverted">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6">
+				<h5>&copy; <span class="thick">2013 National Honor Society</span> <span class="thin">at Cherry Creek High School</span></h5>
+			</div>
+		</div>
+	</div>
+</footer>
 {% endblock %}

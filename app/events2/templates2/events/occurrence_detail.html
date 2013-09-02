@@ -1,0 +1,81 @@
+{% extends "base_2_col.html" %}
+{% load markup comments humanize events_extras %}
+{% block extra-javascript %}
+  <script type="text/javascript">
+  $('textarea').example(function() {
+           return $(this).attr('title'); 
+        }, {className: 'not_example'});
+  </script>
+{% endblock %}
+{% block title %}{{ occurrence.title }}{% endblock %}
+{% block body-class %}two_col{% endblock %}
+{% block body-id %}occurrence{% endblock %}
+{% block primary %}
+<h4 class="section"><span class="iconic calendar"></span>{% if occurrence.required %}Mandatory {% endif %}Occurrence</h4>
+<h3>{{ occurrence.title }}</h3>
+<div class="mid">
+  <span class="event-color" style="background-color: #{{ occurrence.event.event_type.color }}"></span><span class="event-type">{{ occurrence.event.event_type }}</span>
+  <div class="datetime">
+    <span class="date">{{ occurrence.date }}</span><span class="time">{{ occurrence.start_time|date:"P" }} - {{ occurrence.end_time|date:"P" }} <span class="duration">({{ occurrence.duration|format_timedelta }})</span></span><br />
+  </div>
+</div>
+<div class="description">
+{{ occurrence.description|markdown }}
+</div>
+<h4 class="section"><span class="iconic chat"></span>Comments</h4>
+<div id="comment-section">
+{% get_comment_form for occurrence as form %}
+  <form action="{% comment_form_target %}" method="POST"> 
+    {% csrf_token %}
+    <textarea id="callback" class="defaultText" title="Write something..." type="text" rows="10" cols="40" name="comment"></textarea>  
+    {{ form.honeypot }} 
+    {{ form.content_type }} 
+    {{ form.object_pk }} 
+    {{ form.timestamp }} 
+    {{ form.security_hash }}
+    <p class="help-text">Format with <a href="http://daringfireball.net/projects/markdown/basics">Markdown</a>.</p>
+    <input type="submit" value="Post comment" id="id_submit" />
+    <input type="hidden" name="next" value="{{ occurrence.get_absolute_url }}" />
+  </form>
+{% get_comment_list for occurrence as comment_list %}
+<ul class="comment-list">
+{% for comment in comment_list|dictsortreversed:"submit_date" %}
+<li>
+    <div class="meta">
+      <a name="c{{ comment.id }}"></a><span class="user">{{ comment.user.get_full_name }}:</span>
+    </div>
+    <div class="comment-body">{{ comment.comment|markdown|urlize }}</div>
+    <span class="date">{{ comment.submit_date|timedelta }}</span>
+</li>
+{% endfor %}
+</ul>
+</div>
+
+{% endblock %}
+{% block secondary %}
+  <h4 class="section">{% do_add_button user.id occurrence.id "True" %}</h4>
+  <h4 class="section"><span class="iconic document"></span><a href="?print=true" target="_blank">Print event sheet</a></h4>
+    <h4 class="section"><span class="iconic link"></span><a href="{% url events:event-detail occurrence.event.slug %}">Original Event</a></h4>
+  <h4 class="section"><span class="iconic pin"></span>Location</h4>
+  <div class="chunk location">
+    <img src="http://maps.googleapis.com/maps/api/staticmap?center={{ place.point.address }}{{ place.point.city }}&zoom=13&size=260x200&markers=color:blue%7C{{ place.point.address }}&sensor=false" alt="Map of {{ place.point }} in {{ place.point.city }}" />
+    <div class="address">
+      <span class="name">{% if place.url %}<a href="{{ place.url }}">{{ place }}</a>{% else %}{{ place }}{% endif %}</span> <br />
+      {{ place.point.address }} <br />
+      {{ place.point.city }}. {{ place.point.zip }}
+    </div>
+  </div>
+  <h4 class="section"><span class="iconic user"></span>Attending ({{ occurrence.users.all.count }}{% if occurrence.event.capacity %}/{{ occurrence.event.capacity }}{% endif %})</h4>
+  <div class="chunk">
+    {% if occurrence.users.all %}
+    <ul>
+      {% for users in occurrence.users.all %}
+        <li>{{ users.get_full_name }}</li>
+      {% endfor %}
+    </ul>
+    {% else %}
+      <p>Nobody has RSVP'd yet.</p>
+    {% endif %}
+  </div>
+  
+{% endblock %}

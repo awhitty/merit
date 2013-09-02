@@ -1,0 +1,269 @@
+{% extends "base_page.html" %}
+
+{% load tags event rsvp %}
+
+{% block title %}
+  &mdash; Events
+{% endblock title %}
+
+{% block body_id %}events{% endblock body_id %}
+{% block header_prepend %}
+  <div class="btn-group pull-right">
+    <a href="{% url event-month year=last_month.year month=last_month.month %}" class="btn btn-large"><i class="icon-caret-left"></i></a>
+    <a href="" class="btn disabled btn-large">{{ this_month|date:"F" }}</a>
+    <a href="{% url event-month year=next_month.year month=next_month.month %}" class="btn btn-large"><i class="icon-caret-right"></i></a>
+  </div>
+{% endblock header_prepend %}
+{% block page_title %}Events{% if event %} <small>{{ event }}</small>{% endif %}{% endblock page_title %}
+
+{% block content %}
+    <div id="filters" class="row">
+    <div class="span4">
+      <h4 class="caps">Event type</h4>
+      <div class="btn-group filter-group" data-filter-type="or" data-toggle="buttons-checkbox">
+        <button class="btn" data-tag="service">Community Service</button>
+        <button class="btn" data-tag="tutoring">Tutoring</button>
+        <button class="btn" data-tag="meeting">General Meeting</button>
+      </div>
+    </div>
+    <div class="span4">
+      <h4 class="caps">Day of the week</h4>
+      <div class="btn-group filter-group" data-filter-type="or" data-toggle="buttons-checkbox">
+        <button class="btn" data-tag="day-sun">Sun</button>
+        <button class="btn" data-tag="day-mon">Mon</button>
+        <button class="btn" data-tag="day-tue">Tue</button>
+        <button class="btn" data-tag="day-wed">Wed</button>
+        <button class="btn" data-tag="day-thu">Thu</button>
+        <button class="btn" data-tag="day-fri">Fri</button>
+        <button class="btn" data-tag="day-sat">Sat</button>
+      </div>
+    </div>
+    <br />
+    <div class="span4">
+      <input id="textFilter" type="text" placeholder="Filter" class="span4 input-medium search-query">
+    </div>
+    <div class="span4">
+      <h4 class="caps">Time of day</h4>
+      <div class="btn-group filter-group" data-filter-type="or" data-toggle="buttons-checkbox">
+        <button class="btn" data-tag="morning">Morning</button>
+        <button class="btn" data-tag="afternoon">Afternoon</button>
+        <button class="btn" data-tag="evening">Evening</button>
+      </div>
+    </div>
+    <div class="span4">
+      <h4 class="caps">School period</h4>
+      <div class="btn-group filter-group" data-filter-type="and" data-toggle="buttons-checkbox">
+        <button class="btn" data-tag="period-1">1</button>
+        <button class="btn" data-tag="period-2">2</button>
+        <button class="btn" data-tag="period-3">3</button>
+        <button class="btn" data-tag="period-4">4</button>
+        <button class="btn" data-tag="period-5">5</button>
+        <button class="btn" data-tag="period-6">6</button>
+        <button class="btn" data-tag="period-7">7</button>
+        <button class="btn" data-tag="period-8">8</button>
+      </div>
+    </div>
+    <div class="span4">
+      <br>
+      <div class="btn-group pull-left excludes" data-toggle="buttons-checkbox">
+        <button class="btn disabled warning">Hide</button>
+        <button class="btn solo-filter" data-filter-type="not" data-tag="empty">Full</button>
+      </div>
+      <button id="reset" class="btn pull-right"><i class="icon-undo"></i> Reset</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="span12">
+      <table id="eventTable" class="table table-bordered table-striped">
+        {% include "events/includes/event_thead.html" %}
+        <tbody id="tableBody">
+          {% for occurrence in occurrences %}
+            {% occurrence_row request occurrence %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock content %}
+{% block js %}
+<script type="text/javascript">
+  var options = {
+    containerID : "tableBody",
+    perPage : 20,
+    next : "Next",
+    previous : "Prev",
+    delay : 40,
+    callback: function(pages, items) {
+      reTable();
+    }
+  }
+
+  var delay = (function(){
+    var timer = 0;
+    return function(callback, ms){
+      clearTimeout (timer);
+      timer = setTimeout(callback, ms);
+    };
+  })();
+
+  $(function() {
+    /* initiate plugin assigning the desired button labels  */
+    // $(".pagination ul").jPages(options);
+    reTable()
+
+    $('#textFilter').keyup(function() {
+        delay(function(){
+          textFilter($('#textFilter').val())
+        }, 500 );
+      }
+    );
+
+    $('#reset').click(function() {
+      $('button').removeClass('active')
+      $('#textFilter').val('')
+      updateFilter();
+    })
+
+    $('body').on('click', '#eventTable .modal-toggle', function(e) {
+      var occurrence_id = $(this).parent().parent().attr('data-id');
+
+      if ($('#occurrence_'+occurrence_id).length == 0) {
+        $.get('{% url get_occurrence_modal_blank %}'+occurrence_id, function(data) {
+          $('body').append(data);
+          $('#occurrence_'+occurrence_id).modal()
+        })
+      } else {
+        $('#occurrence_'+occurrence_id).modal()
+      }
+    })
+
+    $('body').on('click', '.btn-rsvp', function(e) {
+      rsvp_button($(this))
+    })
+  });
+
+  function rsvp_button(button) {
+    button.html('Loading')
+    var action        = button.attr('data-action')
+    var occurrence_id = button.attr('data-id')
+
+    var btns         = $('.btn-rsvp[data-id='+occurrence_id+']')
+    var row          = $('.trow[data-id='+occurrence_id+']')
+    var modalContent = $('.modal[data-id='+occurrence_id+'] .c')
+
+    $.ajax({
+      type: 'POST',
+      url: '{% url rsvp %}',
+      data: { action: action, occurrence_id: occurrence_id },
+      cache: false,
+      success: function(data) {
+        btns.replaceWith(data.button)
+        row.replaceWith(data.row)
+        modalContent.replaceWith($('.c', data.modal))
+        reTable();
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.log('No good... '+textStatus+" - "+errorThrown)
+      },
+      dataType: 'text json'
+    })
+  }
+
+  function reTable(items) {
+    if(items==undefined) { var items = $('#eventTable tbody tr:visible td:first-child'); }
+    items.show()
+
+    items.each(function(index) {
+      $(this).attr('rowspan', 1)
+      var cDate = $(this).html();
+      var rCount = 1;
+      items.each(function(k, val) {
+        // console.log($(val).parent().css('display'))
+        if($(val).html()==cDate && k > index) {
+          rCount++;
+          $(this).hide();
+          return;
+        }
+      });
+
+      if(rCount>1) {
+        $(this).attr('rowspan',rCount).addClass('mult');
+      }
+
+    });
+  }
+
+  var filters;
+  var vis = $('tbody tr');
+
+  function updateFilter(text) {
+    filters = [];
+    var f = $('#filters');
+    var t = $('#eventTable');
+    $('.filter-group', f).add('.solo-filter', f).each(function(index) {
+      if($('.active', this).add('.excludes .active').length>0) {
+        var f_group = []
+        $('.active', this).add('.excludes .active').each(function() {
+          f_group.push($(this).attr('data-tag'))
+        })
+        filters.push(f_group);
+      }
+    });
+
+    if (filters.length > 0) {
+      $('tbody tr', t).show();
+      $(filters).each(function(index, value) {
+        vis = $('tbody tr:visible')
+        $('tbody tr', t).hide()
+        $(value).each(function(i, v) {
+          $(vis).filter('[data-tags*="'+v+'"]').show()
+        })
+      })
+    } else {
+      $('tbody tr', t).show();
+    }
+
+    var response = $('tbody tr:visible')
+    // $(".pagination ul").jPages(options);
+    // $(".pagination ul").jPages(options);
+
+    vis = response;
+    reTable()
+
+    return response;
+  };
+
+  var d;
+  var val = "";
+
+  function textFilter(text) {
+    if(text.length > 0) {
+      // console.log(' ' + text)
+      val = text;
+      var data = text.split(" ")
+      var toHide = []
+      var toShow = []
+      d=data
+      $(vis).each(function(i, v) {
+        var text = $(v).text().toLowerCase()
+        $(data).each(function(j, k) {
+          if(text.indexOf(k.toLowerCase()) == -1) {
+            toHide.push(v)
+            // alert(k)
+          } else {
+            toShow.push(v)
+          }
+        })
+      })
+  
+      $(toShow).show()
+      $(toHide).hide()
+      // $(".pagination ul").jPages(options);
+    } else {
+      reTable()
+      updateFilter()
+      // $(".pagination ul").jPages(options);
+    }
+  }
+</script>
+{% endblock js %}

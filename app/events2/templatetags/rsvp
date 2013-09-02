@@ -1,0 +1,33 @@
+from django import template
+
+from events.models import Occurrence, RSVP
+# from events.mgmt import add_rsvp
+
+register = template.Library()
+
+def rsvp_button(request, occurrence_id):
+	try:
+		occurrence = Occurrence.objects.get(pk=occurrence_id)
+	except:
+		return "No occurrence with id %s" % (occurrence_id)
+
+	rsvp_exists = request.user in occurrence.users.all()
+	required    = occurrence.event.required
+	response    = ""
+
+	if required and not rsvp_exists:
+		# add_rsvp(request.user, occurrence)
+		return rsvp_button(request, occurrence_id)
+	elif not rsvp_exists:
+		response = mark_safe('<button class="btn btn-small btn-primary btn-rsvp" data-action="add"><i class="icon-plus"></i> RSVP</a>')
+
+	if required and rsvp_exists:
+		response = mark_safe('<button class="btn btn-small btn-rsvp disabled" data-action="none"><i class="icon-minus"></i> RSVP</a>')
+	elif rsvp_exists:
+		response = mark_safe('<button class="btn btn-small btn-danger btn-rsvp" data-action="delete"><i class="icon-minus"></i> RSVP</a>')
+
+	return response
+
+register.tag('rsvp', rsvp_button)
+
+# <a href="#" class="btn btn-small btn-primary"><i class="icon-plus"></i> RSVP</a>

@@ -1,0 +1,45 @@
+{% extends "base_print.html" %}
+{% load event timedelta markup %}
+{% block title %}
+	&mdash; Print RSVPs
+{% endblock title %}
+{% block page_title %}
+	{{ request.user.get_full_name }}
+	<small class="pull-right">{{ request.user }}</small>
+{% endblock page_title %}
+{% block content %}
+	{% for rsvp in rsvps %}
+	<div class="row e">
+		<div class="span5">
+			<table class="table table-condensed">
+				<thead>
+						<th>Information</th>
+						<th class="muted pull-right">{{ rsvp.tag }}</th>
+				</thead>
+				<tr>
+					<td>Date and time</td>
+					<td>
+						{{ rsvp.occurrence.start_time|date:"D, F, jS" }} <br>
+						{{ rsvp.occurrence.start_time|date:"P" }} to {{ rsvp.occurrence.end_time|date:"P" }}
+					</td>
+				</tr>
+				<tr>
+					<td>Duration</td>
+					<td>{{ rsvp.duration|timedelta }}</td>
+				</tr>
+				<tr>
+					<td>Location</td>
+					<td>{% address rsvp.occurrence.event.place %}</td>
+				</tr>
+			</table>
+		</div>
+		<div class="span7">
+			<h3>{{ rsvp.title }} <small>{{ rsvp.occurrence.event.place }}</small></h3>
+			{{ rsvp.occurrence.description|markdown|truncatewords_html:30 }}
+			<p class="muted">Signature:</p>
+			<br>
+			<hr>
+		</div>
+	</div>
+			{% endfor %}
+{% endblock content %}

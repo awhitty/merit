@@ -1,0 +1,29 @@
+{% extends "base_1_col.html" %}
+{% load sort_headers events_extras %}
+{% block title %}Your Hours{% endblock %}
+{% block body-id %}hours{% endblock %}
+{% block solo %}
+<h4 class="section"><span class="iconic clock"></span>Your Hours</h4>
+  {% if rsvp_set %}
+  <table cellspacing="0">
+  <thead>
+    <tr>
+  {% table_header headers %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for rsvp in rsvp_set %}
+    <tr class="{% cycle odd,even %}">
+      <td><a href="{{ rsvp.occurrence.get_absolute_url }}">{{ rsvp.title }}</a></td>
+      <td><span class="event-color" style="background-color: #{{ rsvp.occurrence.event.event_type.color }}"></span>{{ rsvp.occurrence.event.event_type }}</td>
+      <td>{{ rsvp.start_time }}</td>
+      <td>{{ rsvp.duration|format_timedelta }}</td>
+      <td>{% do_add_button user.id rsvp.occurrence.id %}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+  </table>
+  {% else %}
+  <p>You have not RSVP'd for any events yet. <a href="{% url events:default-view %}">Get on that!</a></p>
+  {% endif %}
+{% endblock %}

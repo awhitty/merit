@@ -1,0 +1,101 @@
+{% extends "base_print.html" %}
+{% load event timedelta markup %}
+{% block title %}
+	&mdash; Print blank RSVP sheet
+{% endblock title %}
+{% block extra_style %}
+	<style type="text/css">
+		table td{ height: 50px; }
+		.event { width: 250px; }
+		.contact { width: 200px; }
+		.sig { width: 250px; }
+	</style>
+{% endblock extra_style %}
+{% block page_title %}
+	{{ request.user.get_full_name }}
+	<small class="pull-right">{{ request.user }}</small>
+{% endblock page_title %}
+{% block content %}
+<table class="table table-bordered">
+	<thead>
+		<th class="event">Event</th>
+		<th class="time">Time/Duration</th>
+		<th class="contact">Contact</th>
+		<th class="sig">Signature</th>
+	</thead>
+	<tbody>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+	</tbody>
+</table>
+{% endblock content %}

@@ -19,14 +19,14 @@ from redisify import redisify
 CACHES = redisify(default='redis://localhost/0')
 
 # Configure sessions using Redis. This depends on the caching settings above.
-SESSION_ENGINE = 'redis_sessions.session'
-SESSION_REDIS_HOST, SESSION_REDIS_PORT = \
-        CACHES['default']['LOCATION'].split(':')
-SESSION_REDIS_PORT = int(SESSION_REDIS_PORT)
-SESSION_REDIS_DB = CACHES['default']['OPTIONS']['DB']
-SESSION_REDIS_PASSWORD = CACHES['default']['OPTIONS']['PASSWORD']
-SESSION_REDIS_PREFIX = 'sess'
-SESSION_COOKIE_SECURE = True
+# SESSION_ENGINE = 'redis_sessions.session'
+# SESSION_REDIS_HOST, SESSION_REDIS_PORT = \
+#         CACHES['default']['LOCATION'].split(':')
+# SESSION_REDIS_PORT = int(SESSION_REDIS_PORT)
+# SESSION_REDIS_DB = CACHES['default']['OPTIONS']['DB']
+# SESSION_REDIS_PASSWORD = CACHES['default']['OPTIONS']['PASSWORD']
+# SESSION_REDIS_PREFIX = 'sess'
+# SESSION_COOKIE_SECURE = True
 
 # Use Redis as the broker for Celery tasks
 BROKER_URL = (lambda password, db: 'redis://:%%s@%(LOCATION)s/%%d' \
@@ -142,7 +142,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    'djangosecure.middleware.SecurityMiddleware',
+    # 'djangosecure.middleware.SecurityMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -164,7 +164,10 @@ TEMPLATE_DIRS = (
 
 INSTALLED_APPS = (
     'app.main',
+    'app.merit',
     'app.bootstrap',
+
+    'grappelli',
 
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -179,8 +182,8 @@ INSTALLED_APPS = (
     'south',
     'gunicorn',
     'raven.contrib.django',
-    'djcelery',
-    'djangosecure',
+    # 'djcelery',
+    # 'djangosecure',
 )
 
 # Security

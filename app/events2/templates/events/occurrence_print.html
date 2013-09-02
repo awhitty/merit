@@ -1,0 +1,59 @@
+{% extends "base_print.html" %}
+{% load markup tags event %}
+
+{% block title %}
+	&mdash; {{ occurrence.title }}
+{% endblock title %}
+{% block page_title %}
+	{{ occurrence.title }} <br>
+	<small>{{ request.user.get_full_name }}</small>
+	<small class="pull-right">{{ request.user }}</small>
+{% endblock page_title %}
+{% block content %}
+	<div class="row">
+		
+	</div>
+	<div class="row">
+		<div class="span7">
+			{{ occurrence.description|markdown }}
+		</div>
+		<div class="span5">
+			<a href="https://maps.google.com/?q={% address occurrence.event.place False %}" target="_blank"><img src="http://maps.googleapis.com/maps/api/staticmap?zoom=13&size=530x530&sensor=false&scale=2&
+markers=color:blue%7C{% address occurrence.event.place False %}" style="width: 530px; height: auto;" alt=""></a>
+    <table class="table">
+      <tr>
+        <td class="light">Event type</td>
+        <td>{{ occurrence.event_type }}</td>
+      </tr>
+      <tr>
+        <td class="light">Date</td>
+        <td>{{ occurrence.start_time|date:"l, F, jS, Y" }}</td>
+      </tr>
+      <tr>
+        <td class="light">Time</td>
+        <td>{{ occurrence.start_time|date:"P" }} - {{ occurrence.end_time|date:"P" }}</td>
+      </tr>
+      <tr>
+        <td class="light">Attendance</td>
+        <td>
+          {% if occurrence.is_full %}
+            <span class="badge badge-warning">{{ occurrence.users.count }}
+          {% else %}
+            {{ occurrence.users.count }}
+          {% endif %}
+          {% if occurrence.event.capacity %}/ {{ occurrence.event.capacity }}
+          {% endif %}
+          {% if occurrence.is_full %}
+            </span>
+          {% endif %}
+          &nbsp;member{% if occurrence.event.capacity %}s{% else %}{{ occurrence.users.count|pluralize }}{% endif %}
+        </td>
+      </tr>
+      <tr>
+        <td class="light">Location</td>
+        <td>{% address occurrence.event.place %}</td>
+      </tr>
+    </table>
+		</div>
+	</div>
+{% endblock content %}

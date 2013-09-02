@@ -9,7 +9,9 @@ urlpatterns = patterns('',
     # url(r'^$', 'app.views.home', name='home'),
 
     url(r'^$', include('app.main.urls')),
+    url(r'^merit/$', include('app.merit.urls')),
 
+    url(r'^grappelli/', include('grappelli.urls')),
     url(r'^admin/', include(admin.site.urls)),
 
     # Uncomment the admin/doc line below to enable admin documentation:

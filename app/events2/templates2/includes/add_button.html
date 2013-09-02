@@ -1,0 +1,16 @@
+{% if rsvped %}
+  {% if passed %}
+  {% if rsvp.verified %}
+    {% if occ_page %}<span class="iconic check green"></span>{% endif %}<p class="button verified">Verified</p>
+  {% else %}
+    <a class="button verify" href="{% url events:verify-rsvp rsvp.id %}">Verify</a>
+  {% endif %}
+  {% else %}
+    {% if occ_page %}<span class="iconic minus red"></span>{% endif %}<a class="button remove text" href="{% url events:destroy-rsvp rsvp.id %}" title="Cancel your RSVP :'(">Remove {% if occ_page %}RSVP{% endif %}</a>
+  {% endif %}
+{% else %}
+  {% if passed %}
+  {% else %}
+    {% if occ_page %}<span class="iconic plus"></span>{% endif %}<a class="button text add" href="{% url events:create-rsvp occurrence.id %}" title="RSVP for this event">Add RSVP</a>
+  {% endif %}
+{% endif %}

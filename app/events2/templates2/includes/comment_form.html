@@ -1,0 +1,14 @@
+{% if request.user.is_authenticated %}
+<h4>Comment</h4>
+{% get_comment_form for x as form %}
+  <form action="{% comment_form_target %}" method="POST"> 
+    {% csrf_token %}
+    {{ form.comment }} 
+    {{ form.honeypot }} 
+    {{ form.content_type }} 
+    {{ form.object_pk }} 
+    {{ form.timestamp }} 
+    {{ form.security_hash }} 
+    <input type="submit" value="Add comment" id="id_submit" />
+  </form> 
+{% endif %}

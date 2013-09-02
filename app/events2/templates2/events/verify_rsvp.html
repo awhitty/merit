@@ -1,0 +1,35 @@
+{% extends "base_2_col.html" %}
+{% load events_extras %}
+{% block title %}Verify Attendance for {{ rsvp.occurrence.title }}{% endblock %}
+{% block body-id %}verify{% endblock %}
+{% block extra-javascript %}
+  <script type="text/javascript">
+  $('input').example(function() {
+           return $('.label').attr('title'); 
+        }, {className: 'not_example'});
+  </script>
+{% endblock %}
+{% block primary %}
+<div class="chunk">
+<h4 class="section"><span class="iconic check"></span>Verify Attendance</h4>
+<h3>{{ rsvp.occurrence.title }}</h3><a class="button verify" href="javascript:history.back()" >Return</a>
+<div class="mid">
+  <span class="event-color" style="background-color: #{{ rsvp.occurrence.event.event_type.color }}"></span><span class="event-type">{{ rsvp.occurrence.event.event_type }}</span>
+  <div class="datetime">
+    <span class="date">{{ rsvp.occurrence.date }}</span><span class="time">{{ rsvp.occurrence.start_time|date:"P" }} - {{ rsvp.occurrence.end_time|date:"P" }} <span class="duration">({{ rsvp.occurrence.duration|format_timedelta }})</span></span><br />
+  </div>
+</div>
+{{ error }}
+<form action="{% url events:verify-rsvp rsvp.id %}" method="POST">
+  {% csrf_token %}
+  <a href="#" class="label" title="Verification code"></a>
+  {{ form.as_p }}
+<input type="submit" value="Verify" />
+</form>
+</div>
+{% endblock %}
+{% block secondary %}
+  <h4 class="section"><span class="iconic info"></span>Need help?</h4>
+  <p class="help_text">If you attended an event where verification codes were distributed, all you have to do is punch the eight digit code you were given into the input box on the left and press Verify!</p>
+  <h4><a href="/help/">Any more questions? Check the FAQ.</a></h4>
+{% endblock %}

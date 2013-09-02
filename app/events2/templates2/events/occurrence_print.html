@@ -1,0 +1,49 @@
+{# TODO: Contact information for supervisor #}
+{% extends "base_print.html" %}
+{% block title %}{{ occurrence.title }}{% endblock %}
+{% load markup events_extras %}
+{% block content %}
+<div class="left">
+  <p class="event_type">{{ occurrence.event_type }}</p>
+  <h2 class="title">{{ occurrence.title }}</h2>
+  <p class="datetime"><span class="date">{{ occurrence.date }}</span><span class="time">{{ occurrence.start_time|date:"P" }} - {{ occurrence.end_time|date:"P" }}</span></p> 
+  <div class="description">{{ occurrence.description|markdown }}</div>
+</div>
+<div class="right">
+  <img src="http://maps.googleapis.com/maps/api/staticmap?center={{ place.point.address }}{{ place.point.city }}&zoom=13&size=400x400&markers=color:blue%7C{{ place.point.address }}&sensor=false" alt="Map of {{ place.point }} in {{ place.point.city }}" />
+  <div class="address">
+    <span class="name">{{ place }}</span> <br />
+    {{ place.point.address }} <br />
+    {{ place.point.city }}. {{ place.point.zip }}
+  </div>
+</div>
+{% endblock %}
+{% block bottom %}
+<div id="bottom">
+<p class="help_text">Upon completion of this volunteering event, present this event sheet to your supervisor for a <strong>signature</strong> and your eight digit <strong>verification code</strong> if available. {% if rsvped %} If you have an iOS or Android device, you may verify your hours immediately by scanning the QR code.{% endif %}</p>
+<div class="left">
+  <div class="signature">Signature</div>
+  <div class="sig-date">Date</div>
+  <table class="verification-code">
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </table>
+  <div class="veri-label">Verification Code</div>
+</div>
+{% if rsvped %}
+<div class="right">
+  <div class="qr-code">
+    <img src="https://chart.googleapis.com/chart?chs=400x400&cht=qr&chl=http://creeknhs.org{% url events:verify-rsvp 1 %}" alt="" />
+  </div>
+</div>
+{% endif %}
+</div>
+{% endblock %}
