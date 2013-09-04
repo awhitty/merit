@@ -1,0 +1,31 @@
+{% load base_extras %}
+
+<div class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+            </button>
+            <!-- <a class="navbar-brand" href="index.html"><img class="logo" src="img/nhs-logo-on-white.svg" alt=""></a> -->
+            <a href="{% url 'home' %}" class="navbar-brand">Merit</a>
+        </div>
+
+        <div class="collapse navbar-collapse navbar-responsive-collapse">
+            <ul class="nav navbar-nav">
+                <li class="{% navactive request 'merit-home' %}"><a href="{% url 'merit-home' %}">Home</a></li>
+                <li class="{% navactive request 'merit-occurrences' %}"><a href="{% url 'merit-occurrences' %}">Events</a></li>
+                <li class="{% navactive request 'merit-rsvps' %}"><a href="{% url 'merit-rsvps' %}">RSVPs</a></li>
+                <li><a href="stats">Stats</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% if request.user.is_superuser %}
+                <li><a href="{% url 'admin:index' %}"><span class="glyphicon glyphicon-edit hidden-xs" data-toggle="tooltip" data-placement="bottom" title="Admin"></span> <span class="visible-xs">Admin</span></a></li>
+                {% endif %}
+                <li><a href="#"><span class="glyphicon glyphicon-cog hidden-xs" data-toggle="tooltip" data-placement="bottom" title="Settings"></span> <span class="visible-xs">Settings</span></a></li>
+                <li><a href="#"><span class="glyphicon glyphicon-off hidden-xs" data-toggle="tooltip" data-placement="bottom" title="Log&nbsp;out"></span> <span class="visible-xs">Log out</span></a></li>
+            </ul>
+        </div>
+    </div>
+</div>

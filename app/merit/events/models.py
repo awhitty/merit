@@ -1,8 +1,9 @@
-import datetime
-import timedelta
+import datetime, timedelta, urllib, urllib2
 
 from django.db import models
 from django.contrib.auth.models import User, Group
+from django.utils.encoding import smart_str
+from django.utils import simplejson
 
 from denorm import denormalized, depend_on_related
 
@@ -13,7 +14,7 @@ class EventType(models.Model):
 
     title       = models.CharField(max_length=100)
     slug        = models.SlugField()
-    quota       = timedelta.TimedeltaField()
+    quota       = timedelta.fields.TimedeltaField()
     description = models.TextField(blank=True)
     is_total    = models.BooleanField(blank=True, default=False, help_text='Is this quota for total hours?')
 
@@ -35,19 +36,42 @@ class Place(models.Model):
     state   = models.CharField(max_length=4, default="CO")
     zip     = models.PositiveIntegerField(max_length=10, blank=True, null=True)
 
+    latitude  = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
+
     def __unicode__(self):
         return self.name
 
-class CustomUser(User):
-    class Meta:
-            proxy = True
+    def save(self):
+        
+        # Because google seems to get confused sometimes...
+        if self.address:
+            location = "%s, %s, %s, %s" % (self.address, self.city, self.state, self.zip)
+        else:
+            location = "%s, %s" % (self.name, self.state)
 
-    @staticmethod 
-    def autocomplete_search_fields(): 
-        return ("id__iexact", "username__icontains", "first_name__icontains", "last_name__icontains") 
+        if not self.latitude or not self.longitude:
+            latlng = self.geocode(location)
+            if latlng:
+                latlng = latlng.split(',')
+                self.latitude = float(latlng[0])
+                self.longitude = float(latlng[1])
+
+        super(Place, self).save()
+
+    def geocode(self, location):
+        location = urllib.quote_plus(smart_str(location))
+        request = "http://maps.googleapis.com/maps/api/geocode/json?address=%s&sensor=false" % (location)
+        response = urllib2.urlopen(request).read() 
+        result = simplejson.loads(response)
+        if result['status'] == 'OK':
+            lat = str(result['results'][0]['geometry']['location']['lat'])
+            lng = str(result['results'][0]['geometry']['location']['lng'])
+            return '%s,%s' % (lat, lng)
+        else:
+            return ''
 
 
-#===========================================================================   
 class Event(models.Model):
     """
     Something that can occur.
@@ -67,20 +91,15 @@ class Event(models.Model):
 
     def __unicode__(self):
         return self.title
-        
-    @staticmethod
-    def autocomplete_search_fields():
-        return ("title__icontains", "place__name__icontains",)
 
     @models.permalink
     def get_absolute_url(self):
             return ('event-detail', [self.slug])
 
-#===========================================================================
+class OccurrenceManager(models.Manager):
+    def public(self):
+        return self.get_query_set().filter(event__hide=False)
 
-class PublicOccurrenceManager(models.Manager):
-        def get_query_set(self):
-                return super(PublicOccurrenceManager, self).get_query_set().filter(event__hide=False)
 
 class Occurrence(models.Model):
     """
@@ -91,44 +110,35 @@ class Occurrence(models.Model):
     alt_start_time = models.TimeField(('alternate start time'), blank=True, null=True)
     alt_end_time   = models.TimeField(('alternate end time'), blank=True, null=True)
     event          = models.ForeignKey(Event, verbose_name=('event'))
-    users          = models.ManyToManyField(CustomUser, through='RSVP')
+    users          = models.ManyToManyField(User, through='RSVP')
 
-    public = PublicOccurrenceManager()
+    tags = models.TextField(null=True)
+
+    objects = OccurrenceManager()
 
     def save(self, *args, **kwargs):
         super(Occurrence, self).save(*args, **kwargs)
         if self.event.required:
             from events.helpers import create_rsvp
             for user in User.objects.all():
-
                 create_rsvp(user, self)
-        
 
-    @staticmethod
-    def autocomplete_search_fields():
-        return ("event__title__icontains", "start_date__icontains",)
-
-    #===========================================================================
     class Meta:
             verbose_name = ('occurrence')
             verbose_name_plural = ('occurrences')
             ordering = ('start_time', 'end_time')
     
-    #---------------------------------------------------------------------------
     def __unicode__(self):
         format = "%A, %B %d at %X"
         return u'%s: %s' % (self.title, self.start_time.strftime(format))
-    
-    #---------------------------------------------------------------------------
-    @models.permalink
-    def get_absolute_url(self):
-            return ('events:occurrence-detail', [self.event.slug, self.id])
-    
-    #---------------------------------------------------------------------------
+
     def __cmp__(self, other):
             return cmp(self.start_time, other.start_time)
+    
+    @models.permalink
+    def get_absolute_url(self):
+            return ('merit-occurrence', [self.event.slug, self.id])
             
-    #---------------------------------------------------------------------------
     @denormalized(models.DateTimeField)   
     def start_time(self):
             if self.alt_start_time:
@@ -142,66 +152,34 @@ class Occurrence(models.Model):
                 return datetime.datetime.combine(self.start_date, self.alt_end_time)
             else:
                 return datetime.datetime.combine(self.start_date, self.event.default_end_time)
-
-    @denormalized(models.CharField, max_length=400)
-    def tags(self):
-        t = ""
-        time = self.start_time if not self.alt_start_time else datetime.datetime.combine(self.start_date, self.alt_start_time)
-
-        # Time of day
-        if(time.txime() < datetime.time(12,0,0,0)):
-            t += "morning "
-        elif (time.time() < datetime.time(17,0,0,0)):
-            t += "afternoon "
-        else:
-            t += "evening "
-
-        # School period
-        if self.event.period:
-            t += "period-" + str(self.event.period) + " "
-
-        # Event type
-        t += self.event.event_type.slug + " "
-
-        # Day of the week
-        t += "day-" + time.strftime('%a').lower() + " "
-
-        return t
     
-    #---------------------------------------------------------------------------
-    @denormalized(timedelta.TimedeltaField)
+    @denormalized(timedelta.fields.TimedeltaField)
     def duration(self):
         if self.end_time > self.start_time:
             return (self.end_time - self.start_time)
         else:
             return (self.start_time - self.end_time)
     
-    #---------------------------------------------------------------------------
     @property
     def title(self):
             return self.event.title
 
-    #---------------------------------------------------------------------------
     @property
     def description(self):
             return self.event.description
     
-    #---------------------------------------------------------------------------
     @property
     def event_type(self):
             return self.event.event_type
     
-    #---------------------------------------------------------------------------
     @property
     def required(self):
             return self.event.required
-    #---------------------------------------------------------------------------
     @property
     def date(self):
         format = "%A, %B %d"
         return u'%s' % (self.start_time.strftime(format))
         
-    #---------------------------------------------------------------------------
     @property
     def time(self):
         return (self.start_time, self.end_time)
@@ -222,15 +200,19 @@ class RSVP(models.Model):
     """
     
     tag           = models.CharField(max_length=10)
-    user          = models.ForeignKey(CustomUser)
+    user          = models.ForeignKey(User)
     occurrence    = models.ForeignKey(Occurrence)
-    alt_duration  = timedelta.TimedeltaField(blank=True, null=True)
+    alt_duration  = timedelta.fields.TimedeltaField(blank=True, null=True)
     verified      = models.BooleanField(default=False)
     verified_date = models.DateTimeField(blank=True, null=True)
         
     class Meta:
         verbose_name = 'RSVP'
         unique_together = ("user", "occurrence")
+
+    def __unicode__(self):
+        format = "%A, %B %d"
+        return u'%s to %s on %s' % (self.user, self.occurrence.event, self.occurrence.start_time.strftime(format),)
 
     def save(self, *args, **kwargs):
         try:
@@ -241,8 +223,8 @@ class RSVP(models.Model):
         
         self.tag = str(self.occurrence.title).lower()[:3] + str(self.user.username).lower()[:3] + str(self.occurrence.id)
         super(RSVP, self).save(*args, **kwargs)
-
-    @denormalized(timedelta.TimedeltaField)
+        
+    @denormalized(timedelta.fields.TimedeltaField)
     @depend_on_related('Occurrence', foreign_key='occurrence')
     def duration(self):
         if self.alt_duration:
@@ -253,16 +235,3 @@ class RSVP(models.Model):
     @depend_on_related('Occurrence', foreign_key='occurrence')
     def date(self):
         return self.occurrence.start_time
-        
-    @property
-    def title(self):
-        return self.occurrence.title
-            
-
-    @staticmethod
-    def autocomplete_search_fields():
-        return ("user__iexact", "name__icontains",)
-
-    def __unicode__(self):
-        format = "%A, %B %d"
-        return u'%s to %s on %s' % (self.user, self.occurrence.event, self.occurrence.start_time.strftime(format),)

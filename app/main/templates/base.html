@@ -1,5 +1,4 @@
-{% load captureas %}
-{% load static %}
+{% load captureas static dajaxice_templatetags %}
 
 {% captureas title %}
   {% block title %}{% endblock %}
@@ -23,7 +22,18 @@
 		<!-- Bootstrap -->
 		<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 
+		<!-- Mobile settings -->
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+		<!-- Ajax -->
+		{% dajaxice_js_import %}
+		<script src="{% static "/static/dajax/jquery.dajax.core.js" %}"></script>
+		<script src="{% static "js/ajax.js" %}"></script>
+
+		<!-- UI -->
+		<script src="{% static "js/ui.js" %}"></script>
+
+		{% block head_extras %}{% endblock head_extras %}
 	</head>
 	<body id="{{ body_id }}">
 		{% block base_content %}{% endblock base_content %}

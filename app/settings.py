@@ -12,6 +12,8 @@ MANAGERS = ADMINS
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '.herokuapp.com').split(':')
 
+GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY', None)
+
 import dj_database_url
 DATABASES = {'default': dj_database_url.config()}
 
@@ -39,7 +41,7 @@ BROKER_URL = (lambda password, db: 'redis://:%%s@%(LOCATION)s/%%d' \
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
 # In a Windows environment this must be set to your system time zone.
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'MST'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -120,6 +122,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'dajaxice.finders.DajaxiceFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
@@ -130,7 +133,7 @@ SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    'django.template.loaders.eggs.Loader',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -165,7 +168,7 @@ TEMPLATE_DIRS = (
 INSTALLED_APPS = (
     'app.main',
     'app.merit',
-    'app.bootstrap',
+    'app.merit.events',
 
     'grappelli',
 
@@ -176,12 +179,19 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
+    'django.contrib.humanize',
+    'django.contrib.markup',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 
     'south',
     'gunicorn',
-    'raven.contrib.django',
+    'timedelta',
+    'denorm',
+    'dajaxice',
+    'dajax'
+    # 'djutils'
+    # 'raven.contrib.django',
     # 'djcelery',
     # 'djangosecure',
 )
