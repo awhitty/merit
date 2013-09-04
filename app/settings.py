@@ -13,6 +13,7 @@ MANAGERS = ADMINS
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '.herokuapp.com').split(':')
 
 GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY', None)
+AWS_PRELOAD_METADATA = True
 
 import dj_database_url
 DATABASES = {'default': dj_database_url.config()}
@@ -189,7 +190,8 @@ INSTALLED_APPS = (
     'timedelta',
     'denorm',
     'dajaxice',
-    'dajax'
+    'dajax',
+    'django_s3_collectstatic',
     # 'djutils'
     # 'raven.contrib.django',
     # 'djcelery',
