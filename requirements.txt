@@ -21,7 +21,7 @@ django-redis-sessions==0.4.0
 -e git://github.com/AGoodId/django-s3-collectstatic.git@baf18403f629762a63726e976848e98e79766201#egg=django_s3_collectstatic-master
 django-s3-folder-storage==0.1
 django-secure==1.0
-django-storages==1.1.5
+django-storages==1.1.8
 django-timedeltafield==0.7.0
 gunicorn==0.16.1
 hiredis==0.1.1
