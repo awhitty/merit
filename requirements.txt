@@ -4,7 +4,7 @@ South==0.7.6
 amqp==1.0.11
 anyjson==0.3.3
 billiard==2.7.3.28
-boto==2.6.0
+boto==2.12.0
 celery==3.0.19
 celery-with-redis==3.0
 distribute==0.6.34

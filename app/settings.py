@@ -89,7 +89,6 @@ if not DEBUG:
     STATIC_ROOT = '/%s/' % STATIC_S3_PATH
     STATIC_URL = '//%s.s3.amazonaws.com/%s/' % \
             (AWS_STORAGE_BUCKET_NAME, STATIC_S3_PATH)
-    ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 else:
     # Absolute filesystem path to the directory
     # that will hold user-uploaded files.
