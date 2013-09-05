@@ -1,5 +1,6 @@
 import datetime
 
+from django.utils import simplejson
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from app.main.decorators import render_to
@@ -12,9 +13,9 @@ def index(request):
 
 @render_to('merit/occurrences.html')
 def occurrences(request):
-	occurrence_list = Occurrence.objects.public().filter(start_time__gt=datetime.datetime.now())
+	occurrence_list = Occurrence.objects.public().filter(start_time__gt=datetime.datetime.now()).order_by('start_time')
 
-	paginator = Paginator(occurrence_list, 50)
+	paginator = Paginator(occurrence_list, 25)
 
 	page = request.GET.get('page')
 	try:
@@ -39,7 +40,29 @@ def occurrence(request, id):
 
 @render_to('merit/rsvps.html')
 def rsvps(request):
-    pass
+    rsvp_list = RSVP.objects.filter(user=request.user).order_by('occurrence__start_time')
+    simple_stats = []
+    total_duration = 0
+
+    for rsvp in rsvp_list:
+    	key = rsvp.occurrence.title
+
+    	total_duration += rsvp.duration.total_seconds()
+
+    	simple_stats.append({
+    		'title': key,
+    		'verified': rsvp.verified,
+    		'timestamp': rsvp.occurrence.start_time.isoformat(),
+    		'duration': rsvp.duration.total_seconds(),
+    		'total_duration': total_duration
+    	})
+
+    simple_stats = simplejson.dumps(simple_stats)
+
+    return {
+    	'rsvps': rsvp_list,
+    	'stats': simple_stats
+    }
 
 @render_to('merit/stats.html')
 def stats(request):

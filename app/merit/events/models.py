@@ -119,7 +119,7 @@ class Occurrence(models.Model):
     def save(self, *args, **kwargs):
         super(Occurrence, self).save(*args, **kwargs)
         if self.event.required:
-            from events.helpers import create_rsvp
+            from utils import create_rsvp
             for user in User.objects.all():
                 create_rsvp(user, self)
 

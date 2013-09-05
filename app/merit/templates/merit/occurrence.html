@@ -17,14 +17,14 @@
 
 <section class="tile">
 	<div class="container">
-		<div class="row occurrence-title">
-			<div class="col-md-2">
+		<div class="row button-aligned-title">
+			<div class="col-md-1 col-md-offset-1">
 				<br>
-				<a href="{{ previous }}" class="btn btn-default btn-lg btn-block"><span class="glyphicon glyphicon-arrow-left"></span></a>
+				<a onclick="history.back()" class="btn btn-default btn-lg btn-block"><span class="glyphicon glyphicon-arrow-left"></span></a>
 			</div>
-			<div class="col-md-3 col-md-push-6">
+			<div class="col-md-3 col-md-push-7">
 				<br>
-				{% rsvp_button request occurrence classes="btn-lg btn-block" %}
+				{% rsvp_button request occurrence %}
 			</div>
 			<div class="col-md-6 col-md-pull-3">
 				<h2 class="thick">{{ occurrence.title }}</h2>
@@ -35,7 +35,7 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-3 col-md-push-8">
+			<div class="col-md-3 col-md-push-9">
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						Details
@@ -48,6 +48,10 @@
 						<tr>
 							<td>Time</td>
 							<td>{{ occurrence.start_time|time }} — {{ occurrence.end_time|time }}</td>
+						</tr>
+						<tr>
+							<td>Duration</td>
+							<td>{{ occurrence.duration|timedelta }}</td>
 						</tr>
 						<tr>
 							<td>Attendance</td>

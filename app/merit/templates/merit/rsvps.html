@@ -1,0 +1,232 @@
+{% extends "base_page.html" %}
+
+{% load humanize markup timedelta rsvp %}
+
+{% block title %}Your RSVPs{% endblock title %}
+{% block body_id %}rsvps{% endblock body_id %}
+
+{% block head_extras %}
+	<script src='http://d3js.org/d3.v3.min.js'></script>
+{% endblock head_extras %}
+
+{% block content %}
+<section class="tile rsvp-vis">
+	<figure id="rsvp-graph"></figure>
+</section>
+
+<section class="tile">
+	<div class="container">
+		<div class="row button-aligned-title">
+			<div class="col-sm-2 text-muted center">
+				<br>
+				<span class="glyphicon glyphicon-chevron-up"></span>
+				<br>visualized!
+			</div>
+			<div class="col-sm-7">
+				<h2 class="thick">Your RSVPs <span class="badge">{{ rsvps.count }}</span></h2>
+			</div>
+			<div class="col-sm-3 hidden-xs">
+				<br>
+				<div class="btn-group btn-group-justified">
+					<a href="#" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-print"></span></a>
+					<a href="#" class="btn btn-lg btn-default"><span class="glyphicon glyphicon-file"></span></a>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<hr>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<table class="table">
+					<thead>
+						<tr>
+							<th><span class="glyphicon glyphicon-time"></span></th>
+							<th><span class="glyphicon glyphicon-resize-horizontal"></span></th>
+							<th></th>
+							<th class="hidden-xs"><span class="glyphicon glyphicon-tags"></span></th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for rsvp in rsvps %}
+						{% ifchanged %}
+							<tr class="day">
+								<td colspan="6">
+									<h5 class="thick">
+										{{ rsvp.occurrence.start_time|naturalday|capfirst }} 
+										{# <small class="muted">(August 8th, 2013)</small> #}
+									</h5>
+								</td>
+							</tr>
+						{% endifchanged %}
+						<tr>
+							<td>{{ rsvp.occurrence.start_time|time }}</td>
+							<td>{{ rsvp.occurrence.duration|timedelta }}</td>
+							<td class="title">
+								<a href="{% url 'merit-occurrence' rsvp.occurrence.id %}"><strong>{{ rsvp.occurrence.title }}</strong></a>
+							</td>
+							<td class="hidden-xs hidden-sm">
+								<span class="label label-default">{{ rsvp.occurrence.event_type }}</span>
+								{% if rsvp.occurrence.required %}
+									<span class="label label-info">Required</span>
+								{% endif %}
+								{% if rsvp.verified %}
+									<span class="label label-success">Verified</span>
+								{% endif %}
+							</td>
+							<td class="rsvp-col">
+								<div class="btn-group btn-group-justified block">
+									<a href="{% url 'merit-occurrence' rsvp.occurrence.id %}" class="btn btn-default"><span class="glyphicon glyphicon-info-sign"></span></a>
+									{% rsvp_button request rsvp.occurrence %}
+								</div>
+								
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+	// hours per week maybe?
+	var selector = '#rsvp-graph',
+		width = $(selector).width(),
+		height = $(selector).height(),
+		svg = d3.select(selector).append('svg')
+			.attr('viewBox', '0 0 ' + width + ' ' + height);
+
+	var margin = {
+		left: 30,
+		right: 30,
+		top: 40,
+		bottom: 40
+	}
+
+	var x = d3.time.scale()
+				.range([margin.left, width - margin.right]),
+		y = d3.scale.linear()
+				.range([height - margin.bottom, margin.top]);
+
+	// var data = bumpLayer(7)
+
+	var data = d3.values({{ stats|safe }}).sort(function(a,b) {
+		return new Date(a.timestamp) - new Date(b.timestamp)
+	})
+
+	var line = d3.svg.line()
+		.interpolate('linear')
+		.x(function(d) { return x(new Date(d.timestamp)) })
+		.y(function(d) { return y(d.total_duration) })
+
+
+	console.log(data)
+
+	var yExtent = d3.extent(data, function(d) { return d.total_duration }),
+		start_date = new Date(data[0].timestamp),
+		end_date = new Date(data[data.length - 1].timestamp);
+
+	x.domain([start_date, end_date])
+	y.domain(yExtent)
+
+	svg.append('path')
+		.data([data])
+		.style('stroke', '#D6DEE1')
+		.style('fill', 'none')
+		.style('stroke-width', '0')
+		.attr('d', line)
+		.transition()
+			.duration(250)
+			.delay(data.length * 50 + 100)
+			.style('stroke-width', '3px')
+
+	svg.selectAll('circle').data(data)
+		.enter().append('circle')
+		.attr('cx', function(d) { return x(new Date(d.timestamp)) })
+		.attr('cy', function(d) { return y(d.total_duration) })
+		.attr('r', 0)
+		.style('stroke-width', '3px')
+		.style('stroke', '#D6DEE1')
+		.style('fill', '#fff')
+		.style('cursor', 'pointer')
+		.attr('data-toggle', 'tooltip')
+		.attr('data-placement', 'top')
+		.attr('title', function(d) { return d.title })
+		.transition()
+			.duration(250)
+			.delay(function(d,i) { return i*50; })
+			.attr('r', 10)
+			.style('fill', function(d) {
+				if (d.verified) return '#6AB87E'
+				return '#fff'
+			})
+			
+
+	function bumpLayer(n) {
+		n += 1
+
+  		function bump(a) {
+		    var x = 1 / (.1 + Math.random()),
+		        y = 2 * Math.random() - .5,
+		        z = 10 / (.1 + Math.random());
+
+	    	for (var i = 0; i < n; i++) {
+	      		var w = (i / n - y) * z;
+				a[i] += x * Math.exp(-w * w);
+	    	}
+		}
+
+		var a = [], i;
+		for (i = 0; i < n; ++i) a[i] = 0;
+		for (i = 0; i < 10; ++i) bump(a);
+		return a.map(function(d, i) { return {x: i, y: Math.max(0, d)}; });
+	}
+
+	$('figure').on('mouseover', '[data-toggle="tooltip"]', function(e) {
+		$(this).tooltip({
+			container: 'body'
+		})
+	})
+
+</script>
+<script>
+// $(function () {
+//     //Created By: Brij Mohan
+//     //Website: http://techbrij.com
+//     function groupTable($rows, startIndex, total) {
+//         if (total === 0) {
+//             return;
+//         }
+//         var i, currentIndex = startIndex,
+//             count = 1,
+//             lst = [];
+//         var tds = $rows.find('td:eq(' + currentIndex + ')');
+//         var ctrl = $(tds[0]);
+//         lst.push($rows[0]);
+//         for (i = 1; i <= tds.length; i++) {
+//             if (ctrl.text() == $(tds[i]).text()) {
+//                 count++;
+//                 $(tds[i]).addClass('hidden');
+//                 lst.push($rows[i]);
+//             } else {
+//                 if (count > 1) {
+//                     ctrl.attr('rowspan', count);
+//                     groupTable($(lst), startIndex + 1, total - 1)
+//                 }
+//                 count = 1;
+//                 lst = [];
+//                 ctrl = $(tds[i]);
+//                 lst.push($rows[i]);
+//             }
+//         }
+//     }
+//     groupTable($('table tr:has(td)'), 0, 1);
+//     // $('#myTable .deleted').remove();
+// });
+</script>
+{% endblock content %}

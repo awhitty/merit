@@ -8,76 +8,88 @@
 {% block content %}
 <section class="tile">
 	<div class="container">
-
-			<table class="table table">
-				<thead class="">
-					<tr>
-						<th><span class="glyphicon glyphicon-time"></span></th>
-						<th><span class="glyphicon glyphicon-resize-horizontal"></span></th>
-						<th></th>
-						<th><span class="glyphicon glyphicon-align-left"></span></th>
-						<th></th>
+		<div class="row button-aligned-title">
+			<div class="col-sm-8 col-sm-offset-2">
+				<h2 class="thick">Upcoming Events <span class="badge">{{ rsvps.count }}</span></h2>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<hr>
+			</div>
+		</div>
+		<table class="table table">
+			<thead class="">
+				<tr>
+					<th><span class="glyphicon glyphicon-time"></span></th>
+					<th class="hidden-xs"><span class="glyphicon glyphicon-resize-horizontal"></span></th>
+					<th></th>
+					<th class="hidden-sm hidden-xs"><span class="glyphicon glyphicon-tags"></span></th>
+					<th class="hidden-sm hidden-xs"><span class="glyphicon glyphicon-align-left"></span></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for occurrence in occurrences %}
+				{% ifchanged %}
+					<tr class="day">
+						<td colspan="6">
+							<h5 class="thick">
+								{{ occurrence.start_time|naturalday|capfirst }} 
+								{# <small class="muted">(August 8th, 2013)</small> #}
+							</h5>
+						</td>
 					</tr>
-				</thead>
-				<tbody>
-					{% for occurrence in occurrences %}
-					{% ifchanged %}
-						<tr class="day">
-							<td colspan="6">
-								<h5 class="thick">
-									{{ occurrence.start_time|naturalday|capfirst }} 
-									{# <small class="muted">(August 8th, 2013)</small> #}
-								</h5>
-							</td>
-						</tr>
-					{% endifchanged %}
-						<tr>
-							<td>{{ occurrence.start_time|date:"P" }}</td>
-							<td>{{ occurrence.duration|timedelta }}</td>
-							<td class="title" parent-event key="occurrence.event">
-								<a href="{% url 'merit-occurrence' occurrence.id %}"><strong>{{ occurrence.title }}</strong></a>
+				{% endifchanged %}
+					<tr>
+						<td>{{ occurrence.start_time|date:"P" }}</td>
+						<td class="hidden-xs">{{ occurrence.duration|timedelta }}</td>
+						<td class="title-col">
+							<a href="{% url 'merit-occurrence' occurrence.id %}"><strong>{{ occurrence.title }}</strong></a>
 
-								{% if occurrence.required %}
-									<span class="pull-right label label-info">Required</span>
-								{% endif %}
-								{% if occurrence.is_full %}
-									<span class="pull-right label label-warning">Full</span>
-								{% endif %}
-							</td>
-							<td class="description">
-								<div class="truncate" parent-event key="occurrence.event">
-									{{ occurrence.description|markdown|truncatewords_html:9 }}
-								</div>
-							</td>
-							<td class="rsvp-col">
-								{% if occurrence.required %}
-									<a href="{% url 'merit-occurrence' occurrence.id %}" class="btn btn-default btn-block"><span class="glyphicon glyphicon-info-sign"></span></a>
-								{% else %}
-								<div class="btn-group btn-group-justified block">
-									<a href="{% url 'merit-occurrence' occurrence.id %}" class="btn btn-default"><span class="glyphicon glyphicon-info-sign"></span></a>
-									{% rsvp_button request occurrence %}
-								</div>
-								{% endif %}
-								
-							</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-			<ul class="pager">
-				{# Ick :( #}
-				{% if occurrences.has_previous %}
-					<li class="previous"><a href="?page={{ occurrences.previous_page_number }}">&larr; Sooner</a></li>
-				{% else %}
-					<li class="previous disabled"><a href="">&larr; Sooner</a></li>
-				{% endif %}
+						</td>
+						<td class="hidden-sm hidden-xs tags-col">
+							<span class="label label-default">{{ occurrence.event_type }}</span>
+							{% if occurrence.required %}
+								<span class="label label-info">Required</span>
+							{% endif %}
+							{% if occurrence.is_full %}
+								<span class="label label-warning">Full</span>
+							{% endif %}
+							{% if verified %}
+								<span class="label label-success">Verified</span>
+							{% endif %}
+						</td>
+						<td class="description hidden-sm hidden-xs">
+							<div class="truncate" parent-event key="occurrence.event">
+								{{ occurrence.description|markdown|truncatewords_html:9 }}
+							</div>
+						</td>
+						<td class="rsvp-col">
+							<div class="btn-group btn-group-justified block">
+								<a href="{% url 'merit-occurrence' occurrence.id %}" class="btn btn-default"><span class="glyphicon glyphicon-info-sign"></span></a>
+								{% rsvp_button request occurrence %}
+							</div>
+							
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		<ul class="pager">
+			{# Ick :( #}
+			{% if occurrences.has_previous %}
+				<li class="previous"><a href="?page={{ occurrences.previous_page_number }}">&larr; Sooner</a></li>
+			{% else %}
+				<li class="previous disabled"><a href="">&larr; Sooner</a></li>
+			{% endif %}
 
-				{% if occurrences.has_next %}
-					<li class="next"><a href="?page={{ occurrences.next_page_number }}">Later &rarr;</a></li>
-				{% else %}
-					<li class="next disabled"><a href="">Later &rarr;</a></li>
-				{% endif %}
-			</ul>
+			{% if occurrences.has_next %}
+				<li class="next"><a href="?page={{ occurrences.next_page_number }}">Later &rarr;</a></li>
+			{% else %}
+				<li class="next disabled"><a href="">Later &rarr;</a></li>
+			{% endif %}
+		</ul>
 	</div>
 </section>
 {% endblock content %}

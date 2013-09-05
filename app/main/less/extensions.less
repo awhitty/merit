@@ -1,7 +1,7 @@
 .button-variant(@color; @background; @border) {
   color: @color;
   background-color: @background;
-  border-color: lighten(@border, 10%);
+  border-color: @background;
 
   &:hover,
   &:focus,
@@ -26,11 +26,40 @@
     &:active,
     &.active {
       background-color: @background;
-          border-color: @border
+          border-color: @background;
     }
   }
 }
 
+.btn-default {
+  border-color: @btn-default-border;
+}
+
+.btn-dark {
+  .button-variant(white, @gray-dark, @gray)
+}
+
 .square {
   border-radius: none;
+}
+
+.panel {
+  box-shadow: none;
+}
+
+.panel-heading {
+  font-weight: bold;
+  font-family: @headings-font-family;
+  padding: @padding-large-vertical @padding-large-horizontal;
+}
+
+.btn-lg .glyphicon {
+  position: relative;
+  top: -0.5px;
+}
+
+.label {
+  padding-top: 4px;
+  position: relative;
+  bottom: -1px;
 }

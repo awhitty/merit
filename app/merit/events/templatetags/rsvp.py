@@ -11,7 +11,6 @@ register = template.Library()
 
 @register.simple_tag
 def rsvp_button(req, occ, classes=None):
-
 	rsvp_exists   = req.user in occ.users.all()
 	rsvp_required = occ.required
 	rsvp_past     = occ.start_time < timezone.now()
