@@ -10,7 +10,7 @@
 {% endblock head_extras %}
 
 {% block content %}
-<section class="tile rsvp-vis">
+<section class="tile rsvp-vis hidden-xs">
 	<figure id="rsvp-graph"></figure>
 </section>
 
@@ -19,8 +19,8 @@
 		<div class="row button-aligned-title">
 			<div class="col-sm-2 text-muted center">
 				<br>
-				<span class="glyphicon glyphicon-chevron-up"></span>
-				<br>visualized!
+				<div class="hidden-xs"><span class="glyphicon glyphicon-chevron-up"></span>
+					<br>visualized!</div>
 			</div>
 			<div class="col-sm-7">
 				<h2 class="thick">Your RSVPs <span class="badge">{{ rsvps.count }}</span></h2>
@@ -28,7 +28,7 @@
 			<div class="col-sm-3 hidden-xs">
 				<br>
 				<div class="btn-group btn-group-justified">
-					<a href="#" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-print"></span></a>
+					<a href="#" class="btn btn-dark btn-lg"><span class="glyphicon glyphicon-print"></span></a>
 					<a href="#" class="btn btn-lg btn-default"><span class="glyphicon glyphicon-file"></span></a>
 				</div>
 			</div>

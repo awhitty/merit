@@ -169,6 +169,7 @@ INSTALLED_APPS = (
     'app.main',
     'app.merit',
     'app.merit.events',
+    'app.merit.announcements',
 
     'grappelli',
 
@@ -191,7 +192,9 @@ INSTALLED_APPS = (
     'dajaxice',
     'dajax',
     'django_s3_collectstatic',
-    # 'djutils'
+    'pagedown',
+    'attachments',
+    'bootstrap3'
     # 'raven.contrib.django',
     # 'djcelery',
     # 'djangosecure',

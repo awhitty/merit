@@ -12,7 +12,7 @@
 
 {% block content %}
 <section class="tile occurrence-map">
-	<figure id="map" class="occurrence-map"></figure>
+	<figure id="map"></figure>
 </section>
 
 <section class="tile">
@@ -24,7 +24,10 @@
 			</div>
 			<div class="col-md-3 col-md-push-7">
 				<br>
-				{% rsvp_button request occurrence %}
+				<div class="btn-group btn-group-justified">
+					{% rsvp_button request occurrence %}
+					<a href="#" class="btn btn-dark btn-lg"><span class="glyphicon glyphicon-print"></span></a>
+				</div>
 			</div>
 			<div class="col-md-6 col-md-pull-3">
 				<h2 class="thick">{{ occurrence.title }}</h2>

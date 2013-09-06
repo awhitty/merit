@@ -9,6 +9,8 @@ celery==3.0.19
 celery-with-redis==3.0
 distribute==0.6.34
 dj-database-url==0.2.1
+django-attachments==0.3.1
+-e git+https://github.com/AWhitty/django-bootstrap3.git@3d1a0e0eec46d5d5495e226512713c2e7d7ef0e5#egg=django_bootstrap3-master
 django-celery==3.0.17
 django-celery-with-redis==3.0
 django-dajax==0.9.2
@@ -16,6 +18,7 @@ django-dajaxice==0.5.5
 -e git://github.com/initcrash/django-denorm@ef2bd084804b580f27dae9ea37d862368bd978cc#egg=django_denorm-master
 django-grappelli==2.4.6
 django-heroku-redisify==0.2.1
+django-pagedown==0.0.4
 django-redis-cache==0.9.7
 django-redis-sessions==0.4.0
 -e git://github.com/AGoodId/django-s3-collectstatic.git@baf18403f629762a63726e976848e98e79766201#egg=django_s3_collectstatic-master

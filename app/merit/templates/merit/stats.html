@@ -1,0 +1,32 @@
+{% extends "base_page.html" %}
+
+{% block title %}Statistics{% endblock title %}
+{% block body_id %}stats{% endblock body_id %}
+
+{% block head_extras %}
+	<script src='http://d3js.org/d3.v3.min.js'></script>
+{% endblock head_extras %}
+
+{% block content %}
+
+<section class="tile">
+	<div class="container">
+		<div class="row button-aligned-title">
+			<div class="col-sm-7 col-md-offset-2">
+				<h2 class="thick">Statistics <small>(hold up... still working on it)</small></h2>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<hr>
+			</div>
+		</div>
+		<div class="row">
+			<article class="col-md-6 col-md-offset-2">
+				<p>As you can see, there are definitely no statistics on this page yet. I'm still working on them, but I'm putting them on hold in order to speed up deploying the new site. Stay tuned because they're going to be great!</p>
+				<p>In the meantime, you can look at the superfluous graph of your RSVPs <a href="{% url 'merit-rsvps' %}">here</a>.</p>
+			</article>
+		</div>
+	</div>
+</section>
+{% endblock content %}

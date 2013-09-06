@@ -5,11 +5,26 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from app.main.decorators import render_to
 
-from events.models import *
+from events.models import Occurrence, RSVP
+from announcements.models import Announcement
 
 @render_to('merit/index.html')
 def index(request):
-    pass
+    announcement_list = Announcement.objects.all().order_by('-published')
+
+    paginator = Paginator(announcement_list, 5)
+
+    page = request.GET.get('page')
+    try:
+        announcements = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        announcements = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        announcements = paginator.page(paginator.num_pages)
+
+    return {'announcements': announcements}
 
 @render_to('merit/occurrences.html')
 def occurrences(request):
