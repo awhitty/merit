@@ -1,7 +1,8 @@
 {
   "addons": [
     "heroku-postgresql:dev",
-    "pgbackups:auto-month"
+    "pgbackups:auto-month",
+    "rediscloud:20"
   ],
   "env": {}
 }
