@@ -6,14 +6,14 @@ from forms import AnnouncementForm
 
 from pagedown.widgets import AdminPagedownWidget
 
-# from attachments.admin import AttachmentInlines
+from attachments.admin import AttachmentInlines
 
 
 class AnnouncementAdmin(admin.ModelAdmin):
   list_display = ('title', 'author', 'published',)
   list_filter = ('author','published',)
 
-  # inlines = [AttachmentInlines]
+  inlines = [AttachmentInlines]
 
   prepopulated_fields = {'slug': ('title',)}
   fieldsets = (
