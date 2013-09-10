@@ -82,7 +82,7 @@ class Event(models.Model):
     place              = models.ForeignKey(Place)
     period             = models.PositiveIntegerField(help_text=('If this event occurs during school, which period?'), blank=True, null=True)
     event_type         = models.ForeignKey(EventType)
-    required           = models.BooleanField(help_text=('Is attendance required? Careful, checking this button will RSVP every member.'), default=False, blank=True)
+    required           = models.BooleanField(help_text=('Is attendance required? Careful, checking this button will RSVP every member. Members cannnot remove these RSVPSs.'), default=False, blank=True)
     hide               = models.BooleanField(help_text=('Should this be shown on the events page?'), default=False, blank=True)
     description        = models.TextField(blank=True, help_text=('google \"Markdown\" for formatting tips'))
     capacity           = models.PositiveIntegerField(blank=True, null=True, help_text=('How many volunteers can sign up?'))

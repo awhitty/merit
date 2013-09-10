@@ -1,0 +1,84 @@
+{% extends "base_page.html" %}
+
+{% load static humanize markup timedelta rsvp %}
+
+{% block title %}Print {{ occurrence.title }}{% endblock title %}
+{% block body_id %}occurrence-print{% endblock body_id %}
+
+{% block content %}
+<section class="tile">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8">
+				<h2 class="thick">{{ occurrence.title }}</h2>
+			</div>
+			<div class="col-md-4 right">
+				<h3>{{ user.get_full_name }} <small>({{ user.username }})</small></h3>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<hr>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-7">
+				<article>
+					{{ occurrence.description|markdown }}
+				</article>
+			</div>
+			{% if occurrence.event.place.latitude %}
+			{% with occurrence.event.place.latitude as lat %}
+			{% with occurrence.event.place.longitude as lon %}
+			<div class="col-md-5">
+				<img src="http://api.tiles.mapbox.com/v3/awhitty.map-4w0kpz78/pin-m({{ lon }},{{ lat }})/{{ lon }},{{ lat }},15/640x640.png" class="img-responsive" alt="">
+			</div>
+			{% endwith %}
+			{% endwith %}
+			{% endif %}
+			<div class="col-md-5">
+				<table class="table">
+					<tr>
+						<td>Date</td>
+						<td>{{ occurrence.start_time|date }}</td>
+					</tr>
+					<tr>
+						<td>Time</td>
+						<td>{{ occurrence.start_time|time }} — {{ occurrence.end_time|time }}</td>
+					</tr>
+					<tr>
+						<td>Duration</td>
+						<td>{{ occurrence.duration|timedelta }}</td>
+					</tr>
+					<tr>
+						<td>Attendance</td>
+						<td>
+							{{ occurrence.users.count }}{% if occurrence.event.capacity %}/{{ occurrence.event.capacity }} 
+							{{ occurrence.event.capacity|pluralize:"person,people" }}
+							{% else %}
+							{{ occurrence.users.count|pluralize:"person,people" }}
+							{% endif %}
+							{% if occurrence.is_full %}
+								<span class="label label-warning">Full</span>
+							{% endif %}
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 signature-line">
+				<hr >
+				<div class="row">
+					<div class="col-sm-7"><h5>Signature</h5></div>
+					<div class="col-sm-3"><h5>Contact</h5></div>
+					<div class="col-sm-2"><h5>Date</h5></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+{% endblock content %}
+{% block footer_logo %}
+	<div class="col-md-1 right"><img src="{% static "img/nhs-logo-on-white.svg" %}" class="logo" alt=""></div>
+{% endblock footer_logo %}

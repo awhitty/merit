@@ -20,11 +20,20 @@ body, html {
 }
 
 article {
+	.text-article;
+	.dull;
+}
+
+.text-article {
 	font-size: @font-size-large;
 	font-family: @font-family-serif;
 	line-height: 1.7;
 	padding-bottom: @padding-base-vertical;
-	.dull;
+}
+
+.text-large {
+	font-size: @font-size-large;
+	line-height: 1.7;
 }
 
 header+.tile {
@@ -78,7 +87,7 @@ header+.tile {
 }
 
 .tinted {
-	background: #D6F8FF;
+	background: #D6F8FF !important;
 }
 
 .truncate {
@@ -122,6 +131,11 @@ tbody td {
 	display: block;
 }
 
+.signature-line hr {
+	position: relative;
+	bottom: -@line-height-computed;
+}
+
 // Header
 //-------------------------------
 
@@ -146,8 +160,15 @@ tbody td {
 		border-color: rgba(0,0,0,0);
 	}
 }
-.logo {
-	height: 25px;
+
+.navbar-brand {
+	width: 60px;
+
+	.logo {
+		position: absolute;
+		top: 13px;
+		height: 25px;
+	}
 }
 
 
@@ -225,13 +246,17 @@ tbody td {
 	}
 }
 
-#login .tile {
+#login .tile, #logged-out .tile, #password .tile {
 	position: relative;
 	top: 50%;
 	margin-top: -240px;
 }
 
-#login {
+#password .tile {
+	margin-top: -300px;
+}
+
+.pretty-form {
 	input[type="text"], input[type="password"] {
 		background: @header-background-color;
 		padding: 30px 15px;
@@ -244,7 +269,10 @@ tbody td {
 	}
 
 	label {
-		padding-top: 18px;
+		position: relative;
+		top: 15px;
+		padding-top: @padding-large-vertical;
+		padding-bottom: @padding-large-vertical;
 	}
 }
 
@@ -252,17 +280,20 @@ tbody td {
 //-------------------------------
 
 footer {
-
+	.logo {
+		width: auto;
+		height: 3 * @line-height-computed;
+	}
 }
 
 
 @media (max-width: @screen-md) {
-	#login .tile {
+	#login .tile, #logged-out .tile, #password .tile {
 		position: static;
 		margin: 0;
 	}
 
-	#login label {
-		padding-bottom: @padding-large-vertical;
+	.pretty-form label {
+		position: static;
 	}
 }

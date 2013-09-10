@@ -35,6 +35,9 @@ def delete_rsvp(request, rsvp_id):
 	rsvp = RSVP.objects.get(pk=rsvp_id)
 	occurrence = rsvp.occurrence
 
+	if occurrence.required:
+		return
+		
 	destroy_rsvp(rsvp)
 
 	return refresh_button(request, occurrence)

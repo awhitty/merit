@@ -1,0 +1,200 @@
+{% extends "base_page.html" %}
+
+{% load static humanize markup timedelta rsvp %}
+
+{% block title %}Blank sheet{% endblock title %}
+{% block body_id %}blank{% endblock body_id %}
+
+{% block content %}
+<section class="tile">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8">
+				<h2 class="thick">Blank sheet</h2>
+			</div>
+			<div class="col-md-4 right">
+				<h3>{{ user.get_full_name }} <small>({{ user.username }})</small></h3>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<table class="table">
+					<thead>
+						<tr>
+							<th class="col-md-3">Event</th>
+							<th class="col-md-3">Date and duration</th>
+							<th class="col-md-3">Contact</th>
+							<th class="col-md-3">Signature</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<br>
+								<br>
+								<br>
+							</td>
+							<td>
+								<br>
+								<br>
+								<br>
+							</td>
+							<td>
+								<br>
+								<br>
+								<br>
+							</td>
+							<td>
+								<br>
+								<br>
+								<br>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<br>
+								<br>
+								<br>
+							</td>
+							<td>
+								<br>
+								<br>
+								<br>
+							</td>
+							<td>
+								<br>
+								<br>
+								<br>
+							</td>
+							<td>
+								<br>
+								<br>
+								<br>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<br>
+								<br>
+								<br>
+							</td>
+							<td>
+								<br>
+								<br>
+								<br>
+							</td>
+							<td>
+								<br>
+								<br>
+								<br>
+							</td>
+							<td>
+								<br>
+								<br>
+								<br>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<br>
+								<br>
+								<br>
+							</td>
+							<td>
+								<br>
+								<br>
+								<br>
+							</td>
+							<td>
+								<br>
+								<br>
+								<br>
+							</td>
+							<td>
+								<br>
+								<br>
+								<br>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<br>
+								<br>
+								<br>
+							</td>
+							<td>
+								<br>
+								<br>
+								<br>
+							</td>
+							<td>
+								<br>
+								<br>
+								<br>
+							</td>
+							<td>
+								<br>
+								<br>
+								<br>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<br>
+								<br>
+								<br>
+							</td>
+							<td>
+								<br>
+								<br>
+								<br>
+							</td>
+							<td>
+								<br>
+								<br>
+								<br>
+							</td>
+							<td>
+								<br>
+								<br>
+								<br>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<br>
+								<br>
+								<br>
+							</td>
+							<td>
+								<br>
+								<br>
+								<br>
+							</td>
+							<td>
+								<br>
+								<br>
+								<br>
+							</td>
+							<td>
+								<br>
+								<br>
+								<br>
+							</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</section>
+{% endblock content %}
+{% block footer_logo %}
+	<div class="col-md-1 right"><img src="{% static "img/nhs-logo-on-white.svg" %}" class="logo" alt=""></div>
+{% endblock footer_logo %}

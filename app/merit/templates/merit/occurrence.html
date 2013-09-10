@@ -26,7 +26,7 @@
 				<br>
 				<div class="btn-group btn-group-justified">
 					{% rsvp_button request occurrence %}
-					<a href="#" class="btn btn-dark btn-lg"><span class="glyphicon glyphicon-print"></span></a>
+					<a href="{% url 'merit-print' id=occurrence.id %}" class="btn btn-dark btn-lg"><span class="glyphicon glyphicon-print"></span></a>
 				</div>
 			</div>
 			<div class="col-md-6 col-md-pull-3">

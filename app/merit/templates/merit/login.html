@@ -21,7 +21,7 @@
 						<hr class="light">
 					</div>
 				</div>
-					<form action="{% url 'merit-login' %}?next={% url 'merit-home' %}" class="form-horizontal" role="form" method="post">
+					<form action="{% url 'merit-login' %}?next={% url 'merit-home' %}" class="form-horizontal pretty-form" role="form" method="post">
 						{% csrf_token %}
 					 	{% bootstrap_form form horizontal=True label_class="col-md-2" field_class="col-md-10" %}
 					 	<br>

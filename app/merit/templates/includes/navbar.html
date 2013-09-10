@@ -1,4 +1,4 @@
-{% load base_extras %}
+{% load static base_extras %}
 
 <div class="navbar navbar-inverse navbar-static-top">
     <div class="container">
@@ -8,8 +8,8 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
             </button>
-            <!-- <a class="navbar-brand" href="index.html"><img class="logo" src="img/nhs-logo-on-white.svg" alt=""></a> -->
-            <a href="{% url 'home' %}" class="navbar-brand">Merit</a>
+            <a class="navbar-brand" href="{% url 'merit-home' %}"><img class="logo" src="{% static "img/nhs-logo-on-black.svg" %}" alt=""></a>
+            {# <!-- <a href="{% url 'home' %}" class="navbar-brand">Merit</a> --> #}
         </div>
 
         <div class="collapse navbar-collapse navbar-responsive-collapse">
@@ -17,13 +17,14 @@
                 <li class="{% navactive request 'merit-home' %}"><a href="{% url 'merit-home' %}">Home</a></li>
                 <li class="{% navactive request 'merit-occurrences' %}"><a href="{% url 'merit-occurrences' %}">Events</a></li>
                 <li class="{% navactive request 'merit-rsvps' %}"><a href="{% url 'merit-rsvps' %}">RSVPs</a></li>
+                <li class="divider"></li>
                 <li class="{% navactive request 'merit-stats' %}"><a href="{% url 'merit-stats' %}">Stats</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if request.user.is_superuser %}
                 <li><a href="{% url 'admin:index' %}"><span class="glyphicon glyphicon-edit hidden-xs"></span> <span class="visible-xs">Admin</span></a></li>
                 {% endif %}
-                <li><a href="#"><span class="glyphicon glyphicon-cog hidden-xs"></span> <span class="visible-xs">Settings</span></a></li>
+                <li><a href="{% url 'merit-change-password' %}"><span class="glyphicon glyphicon-cog hidden-xs"></span> <span class="visible-xs">Settings</span></a></li>
                 <li><a href="{% url 'merit-logout' %}"><span class="glyphicon glyphicon-off hidden-xs"></span> <span class="visible-xs">Log out</span></a></li>
             </ul>
         </div>

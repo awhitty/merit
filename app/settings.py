@@ -15,6 +15,8 @@ ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '.herokuapp.com').split(':')
 GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY', None)
 AWS_PRELOAD_METADATA = True
 
+AUTH_PROFILE_MODULE = 'students.Student'
+
 import dj_database_url
 DATABASES = {'default': dj_database_url.config()}
 
@@ -170,6 +172,7 @@ INSTALLED_APPS = (
     'app.merit',
     'app.merit.events',
     'app.merit.announcements',
+    'app.merit.students',
 
     'grappelli',
 

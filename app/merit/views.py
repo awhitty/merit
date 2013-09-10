@@ -47,11 +47,16 @@ def occurrences(request):
 @render_to('merit/occurrence.html')
 def occurrence(request, id):
 	occurrence_item = Occurrence.objects.get(pk=id)
-	previous_page = request.META.get('HTTP_REFERER', None)
 	return {
 		'occurrence': occurrence_item,
-		'previous': previous_page
 	}
+
+@render_to('merit/occurrence_print.html')
+def occurrence_print(request, id):
+    occurrence_item = Occurrence.objects.get(pk=id)
+    return {
+        'occurrence': occurrence_item,
+    }
 
 @render_to('merit/rsvps.html')
 def rsvps(request):
@@ -81,6 +86,10 @@ def rsvps(request):
 
 @render_to('merit/stats.html')
 def stats(request):
+    pass
+
+@render_to('merit/blank_sheet.html')
+def blank_sheet(request):
     pass
 
 # change password

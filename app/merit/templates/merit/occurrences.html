@@ -50,6 +50,9 @@
 						</td>
 						<td class="hidden-sm hidden-xs tags-col">
 							<span class="label label-default">{{ occurrence.event_type }}</span>
+							{% if occurrence.event.period %}
+								<span class="label label-default">{{ occurrence.event.period|ordinal }} period</span>
+							{% endif %}
 							{% if occurrence.required %}
 								<span class="label label-info">Required</span>
 							{% endif %}
