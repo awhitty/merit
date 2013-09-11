@@ -7,36 +7,7 @@
 
 {% block base_content %}
 <header>
-	<div class="navbar navbar-inverse navbar-static-top">
-	  	<div class="container">
-		  	<div class="navbar-header">
-	            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-			    	<span class="sr-only">Toggle navigation</span>
-			    	<span class="icon-bar"></span>
-			    	<span class="icon-bar"></span>
-			    	<span class="icon-bar"></span>
-			    </button>
-
-	            <a class="navbar-brand" href="{% url 'home' %}"><img class="logo" src="{% static "img/nhs-logo-on-black.svg" %}" alt=""></a>
-	            {# <a href="{% url 'home' %}" class="navbar-brand">Merit</a> #}
-	        </div>
-
-	        
-	        <div class="collapse navbar-collapse navbar-ex1-collapse">
-	            <ul class="nav navbar-nav">
-	                <li class="{% navactive request 'home' %}"><a href="{% url 'home' %}">Home</a></li>
-	                {# <li><a href="#">About</a></li> #}
-	                {# <li><a href="#">Board</a></li> #}
-	            </ul>
-	            
-	            {% if user.is_authenticated %}
-	            <a href="{% url 'merit-logout' %}" class="btn btn-on-black btn-primary navbar-btn pull-right">Sign out</a>
-	            {% else %}
-	            <a href="{% url 'merit-login' %}" class="btn btn-on-black btn-primary navbar-btn pull-right">Sign in</a>
-	            {% endif %}
-	        </div>
-	  	</div>
-	</div>
+	{% include "includes/inverted_navbar.html" %}
 
 	<div class="container">
 		<div class="name row">
@@ -51,7 +22,7 @@
 				<a href="{% url 'merit-home' %}" class="btn btn-block btn-primary btn-large">Enter&nbsp; <span class="glyphicon glyphicon-circle-arrow-right"></span></a>
 			</div>
 			<div class="col-md-3">
-				<a href="#" class="btn-on-black btn btn-info btn-block btn-large">Sign out</a>
+				<a href="{% url 'merit-logout' %}" class="btn-on-black btn btn-info btn-block btn-large">Sign out</a>
 			</div>
 		</div>
 		{% else %}
@@ -60,7 +31,7 @@
 				<a href="{% url 'merit-login' %}" class="btn btn-block btn-primary btn-large">Sign in</a>
 			</div>
 			<div class="col-md-3">
-				<a href="#" class="btn-on-black btn btn-info btn-block btn-large">Not a member?</a>
+				<a href="/about/" class="btn-on-black btn btn-info btn-block btn-large">Not a member?</a>
 			</div>
 		</div>
 		{% endif %}

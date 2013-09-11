@@ -17,6 +17,8 @@ AWS_PRELOAD_METADATA = True
 
 AUTH_PROFILE_MODULE = 'students.Student'
 
+GRAPPELLI_ADMIN_TITLE = os.environ.get('ADMIN_TITLE', "Merit")
+
 import dj_database_url
 DATABASES = {'default': dj_database_url.config()}
 
@@ -185,6 +187,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.humanize',
     'django.contrib.markup',
+    'django.contrib.flatpages',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 

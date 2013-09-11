@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% load base_extras static markup %}
+
+{% block title %}{{ flatpage.title }}{% endblock %}
+{% block body_id %}{% endblock body_id %}
+
+{% block base_content %}
+<header>
+	{% include "includes/inverted_navbar.html" %}
+</header>
+
+<section class="tile">
+	<div class="container">
+		<div class="row button-aligned-title">
+			<div class="col-sm-7 col-md-offset-2">
+				<h2 class="thick">{{ flatpage.title }}</h2>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<hr>
+			</div>
+		</div>
+		<div class="row">
+			<article class="col-md-6 col-md-offset-2">
+				{{ flatpage.content|markdown }}
+			</article>
+		</div>
+	</div>
+</section>
+{% endblock base_content %}
