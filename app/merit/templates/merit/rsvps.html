@@ -64,7 +64,7 @@
 						{% endifchanged %}
 						<tr>
 							<td>{{ rsvp.occurrence.start_time|time }}</td>
-							<td>{{ rsvp.occurrence.duration|timedelta }}</td>
+							<td>{{ rsvp.duration|timedelta }}</td>
 							<td class="title">
 								<a href="{% url 'merit-occurrence' rsvp.occurrence.id %}"><strong>{{ rsvp.occurrence.title }}</strong></a>
 							</td>
