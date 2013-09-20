@@ -3,6 +3,6 @@ from django.template import Library
 
 register = Library()
 
-from django.templatetags.static import static
+from django.contrib.staticfiles.templatetags.staticfiles import static
 
 static = register.simple_tag(static)
