@@ -76,7 +76,7 @@ if not DEBUG:
 
     # Static files are stored in the bucket at /static
     # and user-uploaded files are stored at /media
-    STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+    # STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
     DEFAULT_FILE_STORAGE = 's3_folder_storage.s3.DefaultStorage'
     DEFAULT_S3_PATH = 'media'
@@ -90,9 +90,11 @@ if not DEBUG:
     MEDIA_ROOT = '/%s/' % DEFAULT_S3_PATH
     MEDIA_URL = '//%s.s3.amazonaws.com/%s/' % \
             (AWS_STORAGE_BUCKET_NAME, DEFAULT_S3_PATH)
-    STATIC_ROOT = '/%s/' % STATIC_S3_PATH
-    STATIC_URL = '//%s.s3.amazonaws.com/%s/' % \
-            (AWS_STORAGE_BUCKET_NAME, STATIC_S3_PATH)
+    # STATIC_ROOT = '/%s/' % STATIC_S3_PATH
+    # STATIC_URL = '//%s.s3.amazonaws.com/%s/' % \
+    #         (AWS_STORAGE_BUCKET_NAME, STATIC_S3_PATH)
+    STATIC_ROOT = 'staticfiles'
+    STATIC_URL = '/static/'
 else:
     # Absolute filesystem path to the directory
     # that will hold user-uploaded files.
@@ -108,7 +110,7 @@ else:
     # Don't put anything in this directory yourself; store your static files
     # in apps' "static/" subdirectories and in STATICFILES_DIRS.
     # Example: "/home/media/media.lawrence.com/static/"
-    STATIC_ROOT = ''
+    STATIC_ROOT = 'staticfiles'
 
     # URL prefix for static files.
     # Example: "http://media.lawrence.com/static/"
