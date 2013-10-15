@@ -1,0 +1,38 @@
+[
+    {
+        "featureType": "landscape",
+        "stylers": [
+            { "lightness": 100 }
+        ]
+    },{
+        "featureType": "road",
+        "stylers": [
+            { "lightness": 20 },
+            { "saturation": -15 }
+        ]
+    },{
+        "featureType": "poi",
+        "elementType": "labels.text",
+        "stylers": [
+            { "visibility": "off" }
+        ]
+    },{
+        "featureType": "administrative",
+        "elementType": "labels.text",
+        "stylers": [
+            { "visibility": "off" }
+        ]
+    },{
+        "featureType": "road.local",
+        "elementType": "labels.text",
+        "stylers": [
+            { "lightness": 21 },
+            { "saturation": -21 }
+        ]
+    },{
+        "elementType": "labels.icon",
+        "stylers": [
+            { "visibility": "off" }
+        ]
+    }
+]
