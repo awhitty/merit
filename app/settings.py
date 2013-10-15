@@ -179,6 +179,7 @@ INSTALLED_APPS = (
     'app.merit.students',
 
     'grappelli',
+    'dj_static',
 
     'django.contrib.auth',
     'django.contrib.contenttypes',
