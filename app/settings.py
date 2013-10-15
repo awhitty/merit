@@ -80,7 +80,7 @@ if not DEBUG:
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
     DEFAULT_FILE_STORAGE = 's3_folder_storage.s3.DefaultStorage'
     DEFAULT_S3_PATH = 'media'
-    STATICFILES_STORAGE = 's3_folder_storage.s3.StaticStorage'
+    # STATICFILES_STORAGE = 's3_folder_storage.s3.StaticStorage'
     STATIC_S3_PATH = 'static'
     AWS_S3_SECURE_URLS = False
     AWS_QUERYSTRING_AUTH = False
